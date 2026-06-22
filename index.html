@@ -253,9 +253,47 @@
   }
   .chip:hover{border-color:var(--accent);color:var(--accent);}
 
+  /* Confirmation card */
+  .confirm-card{
+    align-self:flex-start;
+    background:#fff;
+    border:1.5px solid #E4E6EA;
+    border-radius:14px;
+    overflow:hidden;
+    width:100%;
+    max-width:94%;
+  }
+  .confirm-card-header{
+    background:#F3F4F6;
+    padding:10px 14px;
+    font-size:11px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;
+    color:#8A919F;font-family:'JetBrains Mono','SF Mono',monospace;
+  }
+  .confirm-card-row{
+    display:flex;justify-content:space-between;align-items:baseline;
+    padding:9px 14px;border-bottom:1px solid #F0F2F5;
+    font-size:13px;
+  }
+  .confirm-card-row:last-of-type{border-bottom:none;}
+  .confirm-card-label{color:#8A919F;font-weight:500;}
+  .confirm-card-value{color:#1A1D25;font-weight:600;text-align:right;max-width:60%;}
+  .confirm-card-actions{
+    display:flex;gap:8px;padding:10px 14px;
+    border-top:1px solid #F0F2F5;
+    background:#FAFAFA;
+  }
+  .confirm-btn{
+    flex:1;padding:9px;border-radius:8px;font-size:13px;font-weight:600;
+    cursor:pointer;font-family:var(--sans);transition:all .15s;border:none;
+  }
+  .confirm-btn.primary{background:var(--accent);color:#fff;}
+  .confirm-btn.primary:hover{opacity:0.88;}
+  .confirm-btn.secondary{background:#fff;color:#525866;border:1.5px solid #C8CBD4;}
+  .confirm-btn.secondary:hover{border-color:var(--accent);color:var(--accent);}
+
   /* Input bar */
   .chat-input-row{
-    display:flex;align-items:center;gap:8px;
+    display:flex;align-items:center;gap:8px;flex-wrap:nowrap;
     padding:10px 12px 12px;background:#fff;border-top:1px solid #ECEEF1;
   }
   .chat-input-row input{
@@ -994,6 +1032,41 @@ async function handleDemoSend() {
   }
 }
 
+function renderConfirmCard(data) {
+  const card = document.createElement("div");
+  card.className = "confirm-card";
+  const rows = [
+    { label: "Name", value: data.name },
+    { label: "Contact", value: data.contact },
+    { label: "Business", value: data.business_type },
+    { label: "Looking for", value: data.summary }
+  ];
+  card.innerHTML = `
+    <div class="confirm-card-header">Summary</div>
+    ${rows.filter(r => r.value).map(r => `
+      <div class="confirm-card-row">
+        <span class="confirm-card-label">${r.label}</span>
+        <span class="confirm-card-value">${r.value}</span>
+      </div>`).join("")}
+    <div class="confirm-card-actions">
+      <button class="confirm-btn primary" id="confirmYes">Looks good</button>
+      <button class="confirm-btn secondary" id="confirmEdit">Edit</button>
+    </div>`;
+  contactChatBodyEl.appendChild(card);
+  contactChatBodyEl.scrollTop = contactChatBodyEl.scrollHeight;
+
+  card.querySelector("#confirmYes").onclick = () => {
+    card.querySelector(".confirm-card-actions").remove();
+    contactChatInputEl.value = "Yes, that's correct";
+    handleContactSend();
+  };
+  card.querySelector("#confirmEdit").onclick = () => {
+    card.querySelector(".confirm-card-actions").remove();
+    contactChatInputEl.value = "I need to make a correction";
+    handleContactSend();
+  };
+}
+
 async function handleContactSend() {
   const text = contactChatInputEl.value.trim();
   if (!text) return;
@@ -1005,7 +1078,20 @@ async function handleContactSend() {
   try {
     const reply = await getContactReply(text);
     typingEl.remove();
-    addMessage(contactChatBodyEl, "bot", reply);
+    // Detect CONFIRM block from Flowise
+    const confirmMatch = reply.match(/CONFIRM:(\{.*?\})/s);
+    if (confirmMatch) {
+      try {
+        const data = JSON.parse(confirmMatch[1]);
+        const cleanReply = reply.replace(/CONFIRM:\{.*?\}/s, "").trim();
+        if (cleanReply) addMessage(contactChatBodyEl, "bot", cleanReply);
+        renderConfirmCard(data);
+      } catch(e) {
+        addMessage(contactChatBodyEl, "bot", reply);
+      }
+    } else {
+      addMessage(contactChatBodyEl, "bot", reply);
+    }
   } catch (err) {
     typingEl.remove();
     addMessage(contactChatBodyEl, "bot", "Hmm, having trouble connecting. Give it another try in a moment.");
