@@ -269,6 +269,56 @@
     box-shadow:0 4px 32px rgba(0,0,0,0.10);border:1px solid #E8EAED;
   }
 
+  /* PRICING SECTION */
+  .pricing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:32px;}
+  .pricing-card{
+    background:#fff;border-radius:14px;
+    border:1px solid var(--line-strong);
+    padding:24px 22px 22px;
+    display:flex;flex-direction:column;
+  }
+  .pricing-card.featured{border:2px solid var(--accent);}
+  .pkg-badge{
+    display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.05em;
+    padding:3px 11px;border-radius:20px;margin-bottom:14px;
+    background:var(--accent-soft);color:var(--accent-dark);
+  }
+  .pkg-badge.hot{background:var(--accent);color:#fff;}
+  .pkg-name{font-size:18px;font-weight:800;letter-spacing:-0.02em;color:var(--ink);margin-bottom:5px;}
+  .pkg-desc{font-size:13px;color:var(--ink-soft);margin-bottom:20px;line-height:1.5;}
+  .pkg-price{font-size:30px;font-weight:800;letter-spacing:-0.03em;color:var(--ink);}
+  .pkg-price-label{font-size:12px;color:var(--ink-soft);margin-left:3px;font-weight:400;}
+  .pkg-monthly{font-size:13px;color:var(--ink-soft);margin:4px 0 20px;}
+  .pkg-monthly strong{color:var(--ink);font-weight:600;}
+  .pkg-divider{border:none;border-top:1px solid var(--line);margin:0 0 18px;}
+  .pkg-features{display:flex;flex-direction:column;gap:10px;flex:1;}
+  .pkg-feat{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;color:var(--ink);line-height:1.4;}
+  .pkg-feat.off{color:var(--ink-soft);}
+  .feat-icon{
+    width:17px;height:17px;border-radius:50%;background:var(--accent);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+  }
+  .feat-icon.off{background:var(--paper-dim);}
+  .feat-icon svg{width:9px;height:9px;}
+  .pkg-cta{
+    margin-top:22px;width:100%;padding:12px;border-radius:8px;
+    font-size:14px;font-weight:600;cursor:pointer;
+    border:1.5px solid var(--accent);background:transparent;color:var(--accent);
+    transition:all .15s;font-family:var(--sans);
+  }
+  .pkg-cta:hover{background:var(--accent-soft);}
+  .pkg-cta.filled{background:var(--accent);color:#fff;}
+  .pkg-cta.filled:hover{opacity:0.9;}
+  .pricing-notes{
+    background:var(--paper-dim);border-radius:12px;padding:20px 24px;
+  }
+  .pricing-notes-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;}
+  .pricing-notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .pricing-note{font-size:12.5px;color:var(--ink-soft);line-height:1.6;display:flex;gap:8px;}
+  .pricing-note-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px;}
+  @media(max-width:860px){.pricing-grid{grid-template-columns:1fr;}}
+  @media(max-width:600px){.pricing-notes-grid{grid-template-columns:1fr;}}
+
   /* CTA BAND */
   .cta-band{background:var(--night);padding:88px 0;text-align:center;position:relative;overflow:hidden;}
   .cta-band::before{
@@ -310,6 +360,7 @@
       <div class="brand"><span class="mark">F&amp;F</span> F&amp;F Web Systems</div>
       <div class="navlinks">
         <a href="#how" data-i18n="nav.how">How it works</a>
+        <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
         <a href="mailto:ffwebsystems@gmail.com" class="nav-email">ffwebsystems@gmail.com</a>
       </div>
       <div class="nav-right">
@@ -403,7 +454,84 @@
     </div>
   </div>
 
-  <div class="section section-alt" id="start">
+  <div class="section" id="pricing">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-eyebrow">Pricing</div>
+        <h2>Simple, honest pricing.</h2>
+        <p class="section-desc">One setup fee, one flat monthly rate. No surprises, no contracts. Cancel anytime.</p>
+      </div>
+      <div class="pricing-grid">
+
+        <!-- Starter -->
+        <div class="pricing-card">
+          <span class="pkg-badge">Starter</span>
+          <div class="pkg-name">Web Presence</div>
+          <div class="pkg-desc">A clean, fast site that looks professional and shows up on Google.</div>
+          <div><span class="pkg-price">$500</span><span class="pkg-price-label">setup</span></div>
+          <div class="pkg-monthly">then <strong>$35/mo</strong> hosting &amp; maintenance</div>
+          <hr class="pkg-divider"/>
+          <div class="pkg-features">
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Custom single-page website</div>
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Mobile-friendly design</div>
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Google Business Profile setup</div>
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Contact form / click-to-call</div>
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Hosting included</div>
+            <div class="pkg-feat off"><div class="feat-icon off"><svg viewBox="0 0 10 10" fill="none" stroke="#9299A6" stroke-width="1.8"><line x1="2.5" y1="2.5" x2="7.5" y2="7.5"/><line x1="7.5" y1="2.5" x2="2.5" y2="7.5"/></svg></div>AI assistant</div>
+          </div>
+          <a href="#contact"><button class="pkg-cta">Get started</button></a>
+        </div>
+
+        <!-- Web + AI -->
+        <div class="pricing-card featured">
+          <span class="pkg-badge hot">Most popular</span>
+          <div class="pkg-name">Web + AI</div>
+          <div class="pkg-desc">Your site plus a trained AI assistant that answers customers 24/7.</div>
+          <div><span class="pkg-price">$950</span><span class="pkg-price-label">setup</span></div>
+          <div class="pkg-monthly">then <strong>$65/mo</strong> hosting &amp; maintenance</div>
+          <hr class="pkg-divider"/>
+          <div class="pkg-features">
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Everything in Starter</div>
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>AI assistant trained on your business</div>
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Answers pricing, hours &amp; FAQs</div>
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Lead capture to your inbox</div>
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>EN + ES bilingual support</div>
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Monthly AI performance updates</div>
+          </div>
+          <a href="#contact"><button class="pkg-cta filled">Get started</button></a>
+        </div>
+
+        <!-- Full Stack -->
+        <div class="pricing-card">
+          <span class="pkg-badge">Growth</span>
+          <div class="pkg-name">Full Stack</div>
+          <div class="pkg-desc">Everything plus local SEO and Google setup to drive real traffic.</div>
+          <div><span class="pkg-price">$1,400</span><span class="pkg-price-label">setup</span></div>
+          <div class="pkg-monthly">then <strong>$100/mo</strong> hosting &amp; maintenance</div>
+          <hr class="pkg-divider"/>
+          <div class="pkg-features">
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Everything in Web + AI</div>
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Multi-page website (up to 5 pages)</div>
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Local SEO optimization</div>
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Google Search Console setup</div>
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Photo gallery / menu page</div>
+            <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Priority support</div>
+          </div>
+          <a href="#contact"><button class="pkg-cta">Get started</button></a>
+        </div>
+
+      </div>
+      <div class="pricing-notes">
+        <div class="pricing-notes-title">Good to know</div>
+        <div class="pricing-notes-grid">
+          <div class="pricing-note"><div class="pricing-note-dot"></div>No long-term contracts. Month-to-month after setup.</div>
+          <div class="pricing-note"><div class="pricing-note-dot"></div>Split the setup fee — half upfront, half on launch.</div>
+          <div class="pricing-note"><div class="pricing-note-dot"></div>Not sure which plan? The AI assistant pays for itself in one saved phone call per day.</div>
+          <div class="pricing-note"><div class="pricing-note-dot"></div>Every plan includes a real human to call if something needs fixing.</div>
+        </div>
+      </div>
+    </div>
+  </div>
     <div class="wrap">
       <div class="section-head">
         <div class="section-eyebrow" data-i18n="contact.eyebrow">Get in touch</div>
@@ -548,13 +676,29 @@ const CHIPS = {
 
 function buildDemoPersona(biz, lang) {
   const langInstruction = lang === "es"
-    ? "Reply in Spanish for this entire conversation."
-    : "Reply in English for this entire conversation.";
-  return "You are the AI assistant for " + biz.name + ". Stay in character. " +
-    "Facts about the business: " + biz.facts + " " + biz.sample[lang] + " " +
-    "If asked something not in the facts, say you're not sure and offer to have the team follow up. " +
-    "If you call save_contact_message, set business_type to \"[DEMO] " + biz.label.en.toLowerCase() + "\". " +
-    langInstruction;
+    ? "Reply in Spanish for this entire conversation, no matter what language the visitor uses."
+    : "Reply in English for this entire conversation, no matter what language the visitor uses.";
+  return `You are the AI chat assistant built into the website of ${biz.name}, a local business in Miami. Your job is to answer visitor questions helpfully and naturally, like a friendly and knowledgeable staff member would.
+
+STRICT RULES:
+1. NEVER ask for the visitor's name, phone number, email, or any contact information. You are an information assistant, not a lead capture tool.
+2. NEVER say "I'll have the team follow up with you" or ask them to provide contact details. If someone asks how to reach the business, say "You can call or message us directly."
+3. Keep answers short — 1 to 3 sentences. No filler like "Great question!" or "Of course!" Just answer.
+4. Stay in character as ${biz.name}'s assistant. Never mention this is a demo.
+5. If a visitor mentions their name, acknowledge it naturally and keep going. Do not pivot to asking for more info.
+
+HOW TO HANDLE QUESTIONS NOT IN THE FACTS:
+- For specific facts you don't have (exact prices, specific staff, specific policies not listed) → say you don't have that detail and suggest they call or message the business.
+- For common-sense questions any business of this type would likely handle (dietary needs, parking, accessibility, payment methods, general hours flexibility, kid-friendly, pet-friendly etc.) → give a reasonable, helpful answer based on what's typical for this kind of business. Use phrases like "typically", "in most cases", or "we can usually accommodate" to signal it's a general answer, not a guaranteed fact.
+- Example: if someone asks "do you have vegan options?" at a restaurant that doesn't list vegan items, a good answer is: "We don't have a dedicated vegan menu, but our kitchen can usually work with dietary requests — best to mention it when you arrive or call ahead."
+- Example: if someone asks "is there parking?" at an auto shop with no parking info listed, a good answer is: "Yes, we have parking on-site — it's an auto shop so there's plenty of room."
+
+BUSINESS FACTS — these are exact, use them precisely:
+${biz.facts}
+
+EXAMPLE of a good response style: ${biz.sample[lang]}
+
+${langInstruction}`;
 }
 
 const CONTACT_GREETING = {
@@ -564,6 +708,7 @@ const CONTACT_GREETING = {
 
 const I18N = {
   "nav.how":              { en: "How it works",    es: "Cómo funciona" },
+  "nav.pricing":          { en: "Pricing",          es: "Precios" },
   "nav.cta":              { en: "Try the demo",     es: "Probar la demo" },
   "hero.eyebrow":         { en: "Websites for local businesses", es: "Sitios web para negocios locales" },
   "hero.lede":            { en: "We build your site and put a trained AI assistant right on it, so visitors get answered at 11pm on a Sunday, not just a contact form they'll forget to fill out.", es: "Construimos tu sitio web y le ponemos un asistente de IA entrenado, para que los visitantes reciban respuesta a las 11pm un domingo, no solo un formulario de contacto que olvidarán llenar." },
