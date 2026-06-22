@@ -257,39 +257,41 @@
   .confirm-card{
     align-self:flex-start;
     background:#fff;
-    border:1.5px solid #E4E6EA;
-    border-radius:14px;
+    border:1.5px solid #E8E0ED;
+    border-radius:12px;
     overflow:hidden;
     width:100%;
-    max-width:94%;
+    max-width:96%;
+    font-family:var(--sans);
   }
   .confirm-card-header{
-    background:#F3F4F6;
-    padding:10px 14px;
-    font-size:11px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;
-    color:#8A919F;font-family:'JetBrains Mono','SF Mono',monospace;
+    background:#F5EFF8;
+    padding:10px 16px;
+    font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+    color:#8B6FA0;
   }
   .confirm-card-row{
-    display:flex;justify-content:space-between;align-items:baseline;
-    padding:9px 14px;border-bottom:1px solid #F0F2F5;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:10px 16px;
+    border-bottom:1px solid #F5EFF8;
     font-size:13px;
   }
   .confirm-card-row:last-of-type{border-bottom:none;}
-  .confirm-card-label{color:#8A919F;font-weight:500;}
-  .confirm-card-value{color:#1A1D25;font-weight:600;text-align:right;max-width:60%;}
+  .confirm-card-label{color:#9B8AAA;font-weight:500;}
+  .confirm-card-value{color:#2D1F3D;font-weight:700;text-align:right;max-width:60%;}
   .confirm-card-actions{
-    display:flex;gap:8px;padding:10px 14px;
-    border-top:1px solid #F0F2F5;
-    background:#FAFAFA;
+    display:flex;gap:8px;padding:10px 12px;
+    border-top:1.5px solid #E8E0ED;
+    background:#FDFAFF;
   }
   .confirm-btn{
-    flex:1;padding:9px;border-radius:8px;font-size:13px;font-weight:600;
+    flex:1;padding:10px;border-radius:20px;font-size:13px;font-weight:600;
     cursor:pointer;font-family:var(--sans);transition:all .15s;border:none;
   }
-  .confirm-btn.primary{background:var(--accent);color:#fff;}
-  .confirm-btn.primary:hover{opacity:0.88;}
-  .confirm-btn.secondary{background:#fff;color:#525866;border:1.5px solid #C8CBD4;}
-  .confirm-btn.secondary:hover{border-color:var(--accent);color:var(--accent);}
+  .confirm-btn.primary{background:#7C4DA0;color:#fff;}
+  .confirm-btn.primary:hover{background:#6a3d8a;}
+  .confirm-btn.secondary{background:#fff;color:#7C4DA0;border:1.5px solid #C9B4D9;}
+  .confirm-btn.secondary:hover{background:#F5EFF8;}
 
   /* Input bar */
   .chat-input-row{
@@ -1049,8 +1051,8 @@ function renderConfirmCard(data) {
         <span class="confirm-card-value">${r.value}</span>
       </div>`).join("")}
     <div class="confirm-card-actions">
-      <button class="confirm-btn primary" id="confirmYes">Looks good</button>
-      <button class="confirm-btn secondary" id="confirmEdit">Edit</button>
+      <button class="confirm-btn primary" id="confirmYes">Confirm & send</button>
+      <button class="confirm-btn secondary" id="confirmEdit">Start over</button>
     </div>`;
   contactChatBodyEl.appendChild(card);
   contactChatBodyEl.scrollTop = contactChatBodyEl.scrollHeight;
@@ -1080,7 +1082,7 @@ async function handleContactSend() {
     typingEl.remove();
     console.log("Flowise reply:", reply);
 
-    // Try CONFIRM:{} block first — works regardless of position in reply
+    // Detect CONFIRM JSON block if Flowise outputs it
     const confirmMatch = reply.match(/CONFIRM:\s*(\{"name"[\s\S]*?\})/);
     if (confirmMatch) {
       try {
@@ -1090,8 +1092,24 @@ async function handleContactSend() {
         renderConfirmCard(data);
         return;
       } catch(e) {
-        console.log("CONFIRM parse error:", e, confirmMatch[1]);
+        console.log("CONFIRM parse error:", e);
       }
+    }
+
+    // Detect natural language confirmation summary
+    // Matches "Just to confirm — your name is X, best way to reach you is Y..."
+    const naturalConfirm = reply.match(/just to confirm[^a-z]*your name is ([^,]+),.*?reach you is ([^,]+),.*?run(?:s)? (?:a |an )?([\w\s]+),.*?looking for ([^.?]+)/i);
+    if (naturalConfirm) {
+      const data = {
+        name:          naturalConfirm[1].trim(),
+        contact:       naturalConfirm[2].trim(),
+        business_type: naturalConfirm[3].trim(),
+        summary:       naturalConfirm[4].trim()
+      };
+      const cleanReply = reply.replace(/just to confirm[\s\S]*?is that right\??/i, "").trim();
+      if (cleanReply) addMessage(contactChatBodyEl, "bot", cleanReply);
+      renderConfirmCard(data);
+      return;
     }
 
     addMessage(contactChatBodyEl, "bot", reply);
