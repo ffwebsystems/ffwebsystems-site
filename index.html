@@ -125,8 +125,32 @@
     animation:pulse 2s infinite;
   }
   @keyframes pulse{0%,100%{box-shadow:0 0 0 2px rgba(15,157,114,0.3);}50%{box-shadow:0 0 0 4px rgba(15,157,114,0.1);}}
-  .demo-head-dots{display:flex;gap:5px;align-items:center;}
+  .demo-head-dots{display:flex;gap:5px;align-items:center;cursor:pointer;padding:4px;border-radius:6px;transition:background .15s;position:relative;}
+  .demo-head-dots:hover{background:rgba(255,255,255,0.08);}
   .demo-head-dots span{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,0.35);display:block;}
+
+  /* Dropdown menu */
+  .chat-menu{
+    position:absolute;top:calc(100% + 6px);right:0;
+    background:#242529;
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:10px;
+    padding:4px;
+    min-width:170px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.4);
+    z-index:50;
+    display:none;
+  }
+  .chat-menu.open{display:block;}
+  .chat-menu-item{
+    display:flex;align-items:center;gap:10px;
+    padding:9px 12px;border-radius:7px;
+    font-size:13px;font-weight:500;color:rgba(255,255,255,0.8);
+    cursor:pointer;transition:background .12s;
+    background:none;border:none;width:100%;text-align:left;font-family:var(--sans);
+  }
+  .chat-menu-item:hover{background:rgba(255,255,255,0.07);color:#fff;}
+  .chat-menu-item svg{opacity:0.6;flex-shrink:0;}
   .demo-sub{display:none;}
 
   /* Business type picker */
@@ -325,7 +349,7 @@
               </div>
             </div>
           </div>
-          <div class="demo-head-dots"><span></span><span></span><span></span></div>
+          <div class="demo-head-dots" id="demoMenuBtn"><span></span><span></span><span></span><div class="chat-menu" id="demoMenu"><button class="chat-menu-item" id="demoReset"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>Reset conversation</button></div></div>
         </div>
         <div class="biz-picker">
           <span class="biz-label" data-i18n="demo.bizLabel">Pick a business:</span>
@@ -401,7 +425,7 @@
               </div>
             </div>
           </div>
-          <div class="demo-head-dots"><span></span><span></span><span></span></div>
+          <div class="demo-head-dots" id="contactMenuBtn"><span></span><span></span><span></span><div class="chat-menu" id="contactMenu"><button class="chat-menu-item" id="contactReset"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>Reset conversation</button></div></div>
         </div>
         <div class="chat-body" id="contactChatBody"></div>
         <div class="chat-input-row">
@@ -781,6 +805,57 @@ chatInputEl.addEventListener("keydown", e => { if (e.key === "Enter") handleDemo
 contactChatSendEl.addEventListener("click", handleContactSend);
 contactChatInputEl.addEventListener("keydown", e => { if (e.key === "Enter") handleContactSend(); });
 langSwitchEl.addEventListener("click", () => applyLanguage(currentLang === "en" ? "es" : "en"));
+
+/* ---- Dot menu (reset) ---- */
+function setupMenu(btnId, menuId, resetFn) {
+  const btn  = document.getElementById(btnId);
+  const menu = document.getElementById(menuId);
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    menu.classList.toggle("open");
+  });
+  // Close when clicking outside
+  document.addEventListener("click", () => menu.classList.remove("open"));
+  document.getElementById(resetFn).addEventListener("click", e => {
+    e.stopPropagation();
+    menu.classList.remove("open");
+  });
+}
+
+// Demo reset
+document.getElementById("demoMenuBtn").addEventListener("click", e => {
+  e.stopPropagation();
+  document.getElementById("demoMenu").classList.toggle("open");
+});
+document.getElementById("demoReset").addEventListener("click", e => {
+  e.stopPropagation();
+  document.getElementById("demoMenu").classList.remove("open");
+  chatHistory = [];
+  demoSessionId = "demo-" + currentType + "-" + Date.now();
+  chatBodyEl.innerHTML = "";
+  addMessage(chatBodyEl, "bot", BUSINESS_TYPES[currentType].greeting[currentLang]);
+  renderChips(currentType, currentLang);
+});
+
+// Contact reset
+document.getElementById("contactMenuBtn").addEventListener("click", e => {
+  e.stopPropagation();
+  document.getElementById("contactMenu").classList.toggle("open");
+});
+document.getElementById("contactReset").addEventListener("click", e => {
+  e.stopPropagation();
+  document.getElementById("contactMenu").classList.remove("open");
+  contactHistory = [];
+  contactChatBodyEl.innerHTML = "";
+  addMessage(contactChatBodyEl, "bot", CONTACT_GREETING[currentLang]);
+  renderContactChips(currentLang);
+});
+
+// Close menus on outside click
+document.addEventListener("click", () => {
+  document.getElementById("demoMenu").classList.remove("open");
+  document.getElementById("contactMenu").classList.remove("open");
+});
 
 /* ---- Init ---- */
 renderBizOptions();
