@@ -4,260 +4,393 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>F&amp;F Web Systems: websites with AI built in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root{
+    /* Dark hero palette */
+    --night:#0A0C10;
+    --night-2:#111318;
+    --night-3:#1A1D25;
+    --night-border:rgba(255,255,255,0.08);
+    --night-border-strong:rgba(255,255,255,0.14);
+
+    /* Light section palette */
     --paper:#F7F8FA;
     --paper-dim:#EDEFF3;
-    --ink:#10131A;
+    --ink:#0F1117;
     --ink-soft:#525866;
+
+    /* Accent — keep existing brand blue */
     --accent:#3548E0;
     --accent-dark:#232F9E;
     --accent-soft:#EEF0FD;
+    --accent-glow:rgba(53,72,224,0.35);
     --mint:#0F9D72;
-    --line:rgba(16,19,26,0.10);
-    --line-strong:rgba(16,19,26,0.20);
-    --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
-    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    --mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+
+    --line:rgba(15,17,23,0.10);
+    --line-strong:rgba(15,17,23,0.18);
+
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    --mono:'JetBrains Mono','SF Mono',Consolas,monospace;
   }
-  *{box-sizing:border-box;}
+  *{box-sizing:border-box;margin:0;padding:0;}
   body{
-    margin:0;
-    background:var(--paper);
-    color:var(--ink);
+    background:var(--night);
+    color:#fff;
     font-family:var(--sans);
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
   }
-  a{color:inherit;}
+  a{color:inherit;text-decoration:none;}
   img{max-width:100%;display:block;}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 32px;}
 
-  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
-
-  /* ---------- NAV ---------- */
-  nav{
+  /* ===== NAV ===== */
+  .site-nav{
+    position:sticky;top:0;z-index:100;
+    background:rgba(10,12,16,0.85);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--night-border);
+  }
+  .nav-inner{
     display:flex;align-items:center;justify-content:space-between;
-    padding:26px 0;border-bottom:1px solid var(--line);
+    height:62px;
   }
   .brand{
-    font-family:var(--sans);font-size:17px;font-weight:700;
-    letter-spacing:-0.01em;display:flex;align-items:center;gap:10px;
+    display:flex;align-items:center;gap:10px;
+    font-size:16px;font-weight:700;letter-spacing:-0.02em;color:#fff;
   }
   .brand .mark{
     width:30px;height:30px;border-radius:7px;
+    background:var(--accent);
     display:flex;align-items:center;justify-content:center;
-    font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:-0.02em;
-    background:var(--accent);color:#fff;
+    font-size:12px;font-weight:800;letter-spacing:-0.03em;color:#fff;
   }
-  .navlinks{display:flex;gap:28px;font-size:14.5px;color:var(--ink-soft);align-items:center;}
-  .navlinks a{text-decoration:none;transition:color .15s;}
-  .navlinks a:hover{color:var(--ink);}
+  .navlinks{
+    display:flex;gap:32px;font-size:14px;font-weight:500;
+    color:rgba(255,255,255,0.55);align-items:center;
+  }
+  .navlinks a{transition:color .15s;}
+  .navlinks a:hover{color:#fff;}
   .nav-email{
-    font-family:var(--mono);font-size:13px;color:var(--accent-dark);
+    font-family:var(--mono);font-size:12.5px;
+    color:rgba(255,255,255,0.45);
   }
-  .nav-right{display:flex;align-items:center;gap:14px;}
+  .nav-right{display:flex;align-items:center;gap:10px;}
   .lang-switch{
-    font-family:var(--mono);font-size:12px;font-weight:700;
-    background:transparent;border:1px solid var(--line-strong);color:var(--ink-soft);
-    padding:6px 11px;border-radius:6px;cursor:pointer;transition:all .15s;
+    font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:0.04em;
+    background:transparent;border:1px solid var(--night-border-strong);
+    color:rgba(255,255,255,0.55);
+    padding:6px 12px;border-radius:6px;cursor:pointer;transition:all .15s;
   }
-  .lang-switch:hover{border-color:var(--accent);color:var(--accent);}
+  .lang-switch:hover{border-color:var(--accent);color:#fff;}
   .nav-cta{
-    font-size:14px;font-weight:600;background:var(--ink);color:#fff;
-    padding:10px 20px;border-radius:6px;text-decoration:none;
-    border:1px solid var(--ink);
+    font-size:13.5px;font-weight:600;
+    background:var(--accent);color:#fff;
+    padding:9px 20px;border-radius:7px;
+    transition:opacity .15s;
   }
+  .nav-cta:hover{opacity:0.88;}
 
-  /* ---------- HERO ---------- */
-  .hero{padding:76px 0 88px;}
-  .hero-grid{
-    display:grid;grid-template-columns:1.05fr 0.95fr;gap:64px;align-items:start;
+  /* ===== HERO ===== */
+  .hero{
+    padding:96px 0 100px;
+    background:var(--night);
+    position:relative;
+    overflow:hidden;
   }
+  /* Subtle radial glow behind hero */
+  .hero::before{
+    content:"";
+    position:absolute;
+    top:-120px;left:50%;transform:translateX(-50%);
+    width:900px;height:600px;
+    background:radial-gradient(ellipse at center,rgba(53,72,224,0.18) 0%,transparent 70%);
+    pointer-events:none;
+  }
+  .hero-inner{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:72px;
+    align-items:center;
+    position:relative;
+  }
+  .hero-left{}
   .eyebrow{
-    font-size:12.5px;letter-spacing:0.1em;text-transform:uppercase;
-    color:var(--accent-dark);font-weight:700;margin-bottom:18px;
-    display:flex;align-items:center;gap:8px;
-    font-family:var(--mono);
+    display:inline-flex;align-items:center;gap:7px;
+    font-family:var(--mono);font-size:11.5px;font-weight:700;
+    letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:22px;
   }
   .eyebrow::before{
-    content:"";width:8px;height:8px;border-radius:2px;background:var(--accent);display:inline-block;
+    content:"";width:6px;height:6px;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 3px rgba(53,72,224,0.3);
   }
   h1{
-    font-family:var(--sans);font-size:50px;line-height:1.08;font-weight:700;
-    letter-spacing:-0.025em;margin:0 0 24px;
+    font-size:54px;line-height:1.06;font-weight:800;
+    letter-spacing:-0.035em;color:#fff;
+    margin-bottom:22px;
   }
   h1 em{font-style:normal;color:var(--accent);}
   .lede{
-    font-size:18px;color:var(--ink-soft);max-width:480px;margin:0 0 36px;
+    font-size:17px;line-height:1.65;
+    color:rgba(255,255,255,0.55);
+    max-width:460px;margin-bottom:36px;
   }
-  .hero-ctas{display:flex;gap:14px;margin-bottom:44px;}
+  .hero-ctas{display:flex;gap:12px;margin-bottom:48px;}
   .btn-primary{
-    background:var(--accent);color:#fff;padding:14px 26px;
-    border-radius:8px;font-size:15px;font-weight:600;text-decoration:none;
+    background:var(--accent);color:#fff;
+    padding:13px 24px;border-radius:8px;
+    font-size:14.5px;font-weight:600;
     border:1px solid var(--accent);
+    transition:opacity .15s;display:inline-block;
   }
+  .btn-primary:hover{opacity:0.88;}
   .btn-secondary{
-    padding:14px 26px;border-radius:8px;font-size:15px;font-weight:600;
-    text-decoration:none;border:1px solid var(--line-strong);color:var(--ink);
+    padding:13px 24px;border-radius:8px;
+    font-size:14.5px;font-weight:600;
+    border:1px solid var(--night-border-strong);
+    color:rgba(255,255,255,0.75);
+    transition:border-color .15s,color .15s;display:inline-block;
   }
+  .btn-secondary:hover{border-color:rgba(255,255,255,0.4);color:#fff;}
   .proof-row{
-    padding-top:28px;border-top:1px solid var(--line);
+    padding-top:28px;
+    border-top:1px solid var(--night-border);
   }
-  .proof-item{font-size:14.5px;color:var(--ink-soft);max-width:440px;line-height:1.6;}
+  .proof-item{
+    font-size:14px;color:rgba(255,255,255,0.38);
+    max-width:420px;line-height:1.65;
+  }
 
-  /* ---------- DEMO PANEL ---------- */
+  /* ===== DEMO PANEL ===== */
   .demo-panel{
-    background:var(--ink);border-radius:10px;overflow:hidden;
-    box-shadow:0 1px 0 var(--line-strong);
+    background:var(--night-2);
+    border:1px solid var(--night-border-strong);
+    border-radius:14px;overflow:hidden;
+    box-shadow:0 0 0 1px rgba(53,72,224,0.12), 0 32px 64px rgba(0,0,0,0.45);
   }
   .demo-head{
-    padding:18px 22px;border-bottom:1px solid rgba(247,248,250,0.10);
+    padding:16px 20px;
+    border-bottom:1px solid var(--night-border);
     display:flex;align-items:center;justify-content:space-between;
+    background:var(--night-3);
   }
   .demo-title{
-    color:#fff;font-size:13px;font-weight:600;
     display:flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:600;color:#fff;
   }
-  .live-dot{width:7px;height:7px;border-radius:50%;background:var(--mint);
-    box-shadow:0 0 0 3px rgba(15,157,114,0.25);}
-  .demo-sub{color:rgba(247,248,250,0.5);font-size:12px;font-family:var(--mono);}
+  .live-dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--mint);
+    box-shadow:0 0 0 3px rgba(15,157,114,0.25);
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(15,157,114,0.25);}50%{box-shadow:0 0 0 5px rgba(15,157,114,0.12);}}
+  .demo-sub{color:rgba(255,255,255,0.35);font-size:12px;font-family:var(--mono);}
 
-  .biz-picker{
-    padding:16px 22px 0;
-  }
+  .biz-picker{padding:16px 20px 0;}
   .biz-label{
-    color:rgba(247,248,250,0.5);font-size:11.5px;letter-spacing:0.06em;
-    text-transform:uppercase;margin-bottom:10px;
+    color:rgba(255,255,255,0.35);font-size:11px;letter-spacing:0.07em;
+    text-transform:uppercase;margin-bottom:10px;font-family:var(--mono);
   }
-  .biz-options{display:flex;flex-wrap:wrap;gap:8px;padding-bottom:18px;}
+  .biz-options{display:flex;flex-wrap:wrap;gap:7px;padding-bottom:16px;}
   .biz-btn{
-    background:transparent;border:1px solid rgba(247,248,250,0.22);
-    color:rgba(247,248,250,0.85);font-size:13px;font-family:var(--sans);
-    padding:8px 14px;border-radius:7px;cursor:pointer;transition:all .15s;
+    background:transparent;
+    border:1px solid var(--night-border-strong);
+    color:rgba(255,255,255,0.65);
+    font-size:12.5px;font-family:var(--sans);
+    padding:7px 14px;border-radius:6px;cursor:pointer;transition:all .15s;
   }
-  .biz-btn:hover{border-color:rgba(247,248,250,0.45);}
+  .biz-btn:hover{border-color:rgba(255,255,255,0.35);color:#fff;}
   .biz-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
 
   .chat-body{
-    background:var(--paper);min-height:280px;max-height:340px;overflow-y:auto;
-    padding:20px 22px;display:flex;flex-direction:column;gap:14px;
+    background:var(--night-2);
+    min-height:260px;max-height:320px;overflow-y:auto;
+    padding:18px 20px;display:flex;flex-direction:column;gap:12px;
   }
-  .msg{max-width:84%;font-size:14.5px;line-height:1.55;padding:11px 14px;border-radius:10px;}
+  .msg{max-width:86%;font-size:14px;line-height:1.55;padding:10px 14px;border-radius:10px;}
   .msg.bot{
-    background:var(--paper-dim);align-self:flex-start;border-bottom-left-radius:3px;
+    background:var(--night-3);color:rgba(255,255,255,0.85);
+    align-self:flex-start;border-bottom-left-radius:3px;
+    border:1px solid var(--night-border);
   }
   .msg.user{
-    background:var(--ink);color:#fff;align-self:flex-end;border-bottom-right-radius:3px;
+    background:var(--accent);color:#fff;
+    align-self:flex-end;border-bottom-right-radius:3px;
   }
   .msg.typing{display:flex;gap:4px;align-items:center;padding:13px 16px;}
-  .msg.typing span{width:5px;height:5px;border-radius:50%;background:var(--ink-soft);opacity:0.4;animation:blink 1.2s infinite;}
+  .msg.typing span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.35);animation:blink 1.2s infinite;}
   .msg.typing span:nth-child(2){animation-delay:0.2s;}
   .msg.typing span:nth-child(3){animation-delay:0.4s;}
-  @keyframes blink{0%,80%,100%{opacity:0.25;}40%{opacity:0.85;}}
+  @keyframes blink{0%,80%,100%{opacity:0.2;}40%{opacity:0.8;}}
 
   .chat-input-row{
-    display:flex;gap:10px;padding:16px 22px 20px;border-top:1px solid rgba(16,19,26,0.08);
-    background:var(--paper);
+    display:flex;gap:8px;padding:14px 20px 16px;
+    border-top:1px solid var(--night-border);
+    background:var(--night-3);
   }
   .chat-input-row input{
-    flex:1;border:1px solid var(--line-strong);border-radius:8px;
-    padding:11px 16px;font-size:14px;font-family:var(--sans);background:#fff;
-    outline:none;
+    flex:1;
+    background:var(--night-2);
+    border:1px solid var(--night-border-strong);
+    border-radius:8px;padding:10px 14px;
+    font-size:13.5px;font-family:var(--sans);
+    color:#fff;outline:none;
+    transition:border-color .15s;
   }
+  .chat-input-row input::placeholder{color:rgba(255,255,255,0.28);}
   .chat-input-row input:focus{border-color:var(--accent);}
   .chat-send{
-    width:40px;height:40px;border-radius:8px;background:var(--ink);border:none;
-    color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
-    flex-shrink:0;
+    width:38px;height:38px;border-radius:8px;
+    background:var(--accent);border:none;
+    color:#fff;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;transition:opacity .15s;
   }
-  .chat-send:hover{background:var(--accent);}
+  .chat-send:hover{opacity:0.85;}
   .try-hint{
-    text-align:center;font-size:12px;color:var(--ink-soft);padding:0 22px 16px;
-  }
-
-  /* ---------- HOW IT WORKS ---------- */
-  .section{padding:88px 0;}
-  .section-alt{background:var(--paper-dim);}
-  .section-head{max-width:560px;margin-bottom:56px;}
-  .section-eyebrow{
-    font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
-    color:var(--accent-dark);font-weight:700;margin-bottom:14px;
+    text-align:center;font-size:11.5px;
+    color:rgba(255,255,255,0.28);
+    padding:0 20px 14px;
     font-family:var(--mono);
   }
-  h2{font-family:var(--sans);font-size:32px;font-weight:700;margin:0 0 14px;letter-spacing:-0.02em;}
-  .section-desc{color:var(--ink-soft);font-size:16px;}
 
+  /* ===== LIGHT SECTIONS ===== */
+  .light-wrap{background:var(--paper);color:var(--ink);}
+  .section{padding:88px 0;}
+  .section-alt{background:var(--paper-dim);}
+
+  .section-head{max-width:580px;margin-bottom:56px;}
+  .section-eyebrow{
+    font-family:var(--mono);font-size:11.5px;font-weight:700;
+    letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--accent-dark);margin-bottom:14px;
+  }
+  h2{font-size:34px;font-weight:800;letter-spacing:-0.025em;margin-bottom:14px;color:var(--ink);}
+  .section-desc{color:var(--ink-soft);font-size:16px;line-height:1.65;}
+
+  /* ===== HOW IT WORKS ===== */
   .moves{display:flex;flex-direction:column;}
   .move{
-    display:grid;grid-template-columns:48px 1fr;gap:28px;
+    display:grid;grid-template-columns:56px 1fr;gap:24px;
     padding:28px 0;border-bottom:1px solid var(--line);
+    align-items:start;
   }
   .move:first-child{padding-top:0;}
   .move:last-child{border-bottom:none;}
   .move-num{
-    font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:700;
-    padding-top:3px;background:var(--accent-soft);width:32px;height:32px;
-    border-radius:7px;display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:12px;font-weight:700;
+    color:var(--accent);
+    background:var(--accent-soft);
+    width:34px;height:34px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
   }
-  .move h3{font-family:var(--sans);font-size:19px;font-weight:700;margin:0 0 8px;letter-spacing:-0.01em;}
-  .move p{font-size:15px;color:var(--ink-soft);margin:0;max-width:520px;}
+  .move h3{font-size:18px;font-weight:700;letter-spacing:-0.01em;margin:0 0 7px;color:var(--ink);}
+  .move p{font-size:15px;color:var(--ink-soft);max-width:520px;}
 
-  /* ---------- FOUNDER NOTE ---------- */
+  /* ===== FOUNDER NOTE ===== */
   .founder-note{
-    border-left:2px solid var(--accent);padding:6px 0 6px 28px;max-width:640px;margin-bottom:40px;
+    border-left:2px solid var(--accent);
+    padding:6px 0 6px 24px;
+    max-width:620px;margin-bottom:36px;
   }
-  .founder-note p{font-size:17px;color:var(--ink-soft);margin:0 0 16px;line-height:1.65;}
+  .founder-note p{font-size:16.5px;color:var(--ink-soft);margin:0 0 14px;line-height:1.65;}
   .founder-note p:last-child{margin-bottom:0;}
-  .founder-sign{font-family:var(--mono);font-style:normal;color:var(--ink);font-size:14px;margin-top:18px;}
+  .founder-sign{font-family:var(--mono);font-size:13.5px;color:var(--ink);margin-top:16px!important;}
 
-  /* ---------- CONTACT PANEL ---------- */
+  /* ===== CONTACT PANEL (light bg context) ===== */
   .contact-panel{
-    background:var(--ink);border-radius:10px;overflow:hidden;
-    max-width:640px;
+    background:var(--night-2);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:14px;overflow:hidden;
+    max-width:620px;
+    box-shadow:0 8px 40px rgba(0,0,0,0.18);
   }
 
-  /* ---------- PROOF ---------- */
-
-  /* ---------- CTA BAND ---------- */
+  /* ===== CTA BAND ===== */
   .cta-band{
-    background:var(--ink);color:#fff;padding:72px 0;text-align:center;
+    background:var(--night);
+    padding:88px 0;text-align:center;
+    position:relative;overflow:hidden;
   }
-  .cta-band h2{color:#fff;}
-  .cta-band .section-desc{color:rgba(247,248,250,0.6);margin:0 auto 32px;max-width:480px;}
-  .cta-band .btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .cta-band::before{
+    content:"";position:absolute;
+    top:-80px;left:50%;transform:translateX(-50%);
+    width:700px;height:400px;
+    background:radial-gradient(ellipse at center,rgba(53,72,224,0.15) 0%,transparent 70%);
+    pointer-events:none;
+  }
+  .cta-band h2{color:#fff;position:relative;}
+  .cta-band .section-desc{color:rgba(255,255,255,0.45);margin:0 auto 32px;max-width:460px;position:relative;}
+  .cta-band .btn-primary{position:relative;}
 
-  footer{padding:40px 0;border-top:1px solid var(--line);}
-  .foot-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-soft);}
+  /* ===== FOOTER ===== */
+  .site-footer{
+    background:var(--night-2);
+    border-top:1px solid var(--night-border);
+    padding:32px 0;
+  }
+  .foot-row{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:13px;color:rgba(255,255,255,0.3);
+  }
+  .foot-brand{color:rgba(255,255,255,0.6);font-weight:600;}
+  .foot-email{
+    font-family:var(--mono);font-size:12px;
+    color:rgba(255,255,255,0.3);
+  }
 
-  @media(max-width:880px){
-    .hero-grid{grid-template-columns:1fr;}
-    h1{font-size:36px;}
-    .move{grid-template-columns:1fr;gap:8px;}
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:900px){
+    .hero-inner{grid-template-columns:1fr;gap:48px;}
+    h1{font-size:38px;}
     .navlinks{display:none;}
-    .proof-row{flex-wrap:wrap;}
+    .hero{padding:72px 0 80px;}
+  }
+  @media(max-width:600px){
+    .wrap{padding:0 20px;}
+    h1{font-size:32px;}
+    h2{font-size:26px;}
+    .section{padding:64px 0;}
+    .hero-ctas{flex-direction:column;}
+    .btn-primary,.btn-secondary{text-align:center;}
+    .foot-row{flex-direction:column;gap:8px;text-align:center;}
   }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <nav>
-    <div class="brand"><span class="mark">F&amp;F</span> F&amp;F Web Systems</div>
-    <div class="navlinks">
-      <a href="#how" data-i18n="nav.how">How it works</a>
-      <a href="mailto:ffwebsystems@gmail.com" class="nav-email">ffwebsystems@gmail.com</a>
-    </div>
-    <div class="nav-right">
-      <button class="lang-switch" id="langSwitch" type="button">ES</button>
-      <a href="#demo" class="nav-cta" data-i18n="nav.cta">Try the demo</a>
-    </div>
-  </nav>
-</div>
+<!-- ===== NAV ===== -->
+<header class="site-nav">
+  <div class="wrap">
+    <nav class="nav-inner">
+      <div class="brand">
+        <span class="mark">F&amp;F</span>
+        F&amp;F Web Systems
+      </div>
+      <div class="navlinks">
+        <a href="#how" data-i18n="nav.how">How it works</a>
+        <a href="mailto:ffwebsystems@gmail.com" class="nav-email">ffwebsystems@gmail.com</a>
+      </div>
+      <div class="nav-right">
+        <button class="lang-switch" id="langSwitch" type="button">ES</button>
+        <a href="#demo" class="nav-cta" data-i18n="nav.cta">Try the demo</a>
+      </div>
+    </nav>
+  </div>
+</header>
 
-<div class="wrap">
-  <section class="hero">
-    <div class="hero-grid">
-      <div>
+<!-- ===== HERO (dark) ===== -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-inner">
+      <div class="hero-left">
         <div class="eyebrow" data-i18n="hero.eyebrow">Websites for local businesses</div>
         <h1 data-i18n-html="hero.h1">A website that <em>answers back</em>, not one that just sits there.</h1>
         <p class="lede" data-i18n="hero.lede">We build your site and put a trained AI assistant right on it, so visitors get answered at 11pm on a Sunday, not just a contact form they'll forget to fill out.</p>
@@ -266,10 +399,11 @@
           <a href="#contact" class="btn-secondary" data-i18n="hero.ctaSecondary">Get in touch</a>
         </div>
         <div class="proof-row">
-          <div class="proof-item" data-i18n="hero.proof">Small operation, big results. No layers, no long timelines. Just a site that works and an assistant that answers.</div>
+          <p class="proof-item" data-i18n="hero.proof">Small operation, big results. No layers, no long timelines. Just a site that works and an assistant that answers.</p>
         </div>
       </div>
 
+      <!-- Demo widget -->
       <div class="demo-panel" id="demo">
         <div class="demo-head">
           <div class="demo-title"><span class="live-dot"></span><span data-i18n="demo.title">Live demo</span></div>
@@ -283,76 +417,81 @@
         <div class="chat-input-row">
           <input type="text" id="chatInput" data-i18n-placeholder="demo.inputPlaceholder" placeholder="Ask it something a real customer would ask…" />
           <button class="chat-send" id="chatSend" aria-label="Send">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
           </button>
         </div>
         <div class="try-hint" data-i18n="demo.tryHint">This is the same assistant we'd build into your site. Go ahead, try it.</div>
       </div>
     </div>
-  </section>
-</div>
+  </div>
+</section>
 
-<div class="section" id="how">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="section-eyebrow" data-i18n="how.eyebrow">How it works</div>
-      <h2 data-i18n="how.h2">A clear process, not a black box.</h2>
-      <p class="section-desc" data-i18n="how.desc">No bloated process, no months-long timeline. This is the actual sequence we use, start to finish.</p>
+<!-- ===== HOW IT WORKS (light) ===== -->
+<div class="light-wrap">
+  <div class="section" id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-eyebrow" data-i18n="how.eyebrow">How it works</div>
+        <h2 data-i18n="how.h2">A clear process, not a black box.</h2>
+        <p class="section-desc" data-i18n="how.desc">No bloated process, no months-long timeline. This is the actual sequence we use, start to finish.</p>
+      </div>
+      <div class="moves">
+        <div class="move">
+          <div class="move-num">01</div>
+          <div>
+            <h3 data-i18n="how.step1Title">We learn your business</h3>
+            <p data-i18n="how.step1Desc">Services, hours, pricing, the questions your customers actually ask. No long questionnaires, just one short call.</p>
+          </div>
+        </div>
+        <div class="move">
+          <div class="move-num">02</div>
+          <div>
+            <h3 data-i18n="how.step2Title">We build and train</h3>
+            <p data-i18n="how.step2Desc">Your site goes up, and your assistant gets trained on your real information, so it never makes things up about your business.</p>
+          </div>
+        </div>
+        <div class="move">
+          <div class="move-num">03</div>
+          <div>
+            <h3 data-i18n="how.step3Title">You go live</h3>
+            <p data-i18n="how.step3Desc">Hosted and looked after by us. You focus on running your business, we keep the site and the assistant running.</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="moves">
-      <div class="move">
-        <div class="move-num">01</div>
-        <div>
-          <h3 data-i18n="how.step1Title">We learn your business</h3>
-          <p data-i18n="how.step1Desc">Services, hours, pricing, the questions your customers actually ask. No long questionnaires, just one short call.</p>
-        </div>
+  </div>
+
+  <!-- ===== CONTACT (light-alt) ===== -->
+  <div class="section section-alt" id="start">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-eyebrow" data-i18n="contact.eyebrow">Get in touch</div>
+        <h2 data-i18n="contact.h2">Tell us about your business.</h2>
       </div>
-      <div class="move">
-        <div class="move-num">02</div>
-        <div>
-          <h3 data-i18n="how.step2Title">We build and train</h3>
-          <p data-i18n="how.step2Desc">Your site goes up, and your assistant gets trained on your real information, so it never makes things up about your business.</p>
-        </div>
+      <div class="founder-note">
+        <p data-i18n="contact.note">Every shop is different, so pricing isn't one-size-fits-all. Send us a quick message about what you need and we'll get back to you with a straight answer, not a sales pitch.</p>
+        <p class="founder-sign">— F&amp;F Web Systems</p>
       </div>
-      <div class="move">
-        <div class="move-num">03</div>
-        <div>
-          <h3 data-i18n="how.step3Title">You go live</h3>
-          <p data-i18n="how.step3Desc">Hosted and looked after by us. You focus on running your business, we keep the site and the assistant running.</p>
+
+      <div class="contact-panel" id="contact">
+        <div class="demo-head">
+          <div class="demo-title"><span class="live-dot"></span><span data-i18n="contact.title">F&amp;F Assistant</span></div>
+          <div class="demo-sub" data-i18n="contact.sub">Tell it what you need</div>
         </div>
+        <div class="chat-body" id="contactChatBody"></div>
+        <div class="chat-input-row">
+          <input type="text" id="contactChatInput" data-i18n-placeholder="contact.inputPlaceholder" placeholder="What does your business need?" />
+          <button class="chat-send" id="contactChatSend" aria-label="Send">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          </button>
+        </div>
+        <div class="try-hint" data-i18n="contact.tryHint">Leave your name and contact info and we'll follow up, no commitment.</div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="section section-alt" id="start">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="section-eyebrow" data-i18n="contact.eyebrow">Get in touch</div>
-      <h2 data-i18n="contact.h2">Tell us about your business.</h2>
-    </div>
-    <div class="founder-note">
-      <p data-i18n="contact.note">Every shop is different, so pricing isn't one-size-fits-all. Send us a quick message about what you need and we'll get back to you with a straight answer, not a sales pitch.</p>
-      <p class="founder-sign">— F&amp;F Web Systems</p>
-    </div>
-
-    <div class="contact-panel" id="contact">
-      <div class="demo-head">
-        <div class="demo-title"><span class="live-dot"></span><span data-i18n="contact.title">F&amp;F Assistant</span></div>
-        <div class="demo-sub" data-i18n="contact.sub">Tell it what you need</div>
-      </div>
-      <div class="chat-body" id="contactChatBody"></div>
-      <div class="chat-input-row">
-        <input type="text" id="contactChatInput" data-i18n-placeholder="contact.inputPlaceholder" placeholder="What does your business need?" />
-        <button class="chat-send" id="contactChatSend" aria-label="Send">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-        </button>
-      </div>
-      <div class="try-hint" data-i18n="contact.tryHint">Leave your name and contact info and we'll follow up, no commitment.</div>
-    </div>
-  </div>
-</div>
-
+<!-- ===== CTA BAND (dark) ===== -->
 <div class="cta-band">
   <div class="wrap">
     <h2 data-i18n="cta.h2">Try it, then reach out.</h2>
@@ -361,14 +500,16 @@
   </div>
 </div>
 
-<div class="wrap">
-  <footer>
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="wrap">
     <div class="foot-row">
-      <div>F&amp;F Web Systems</div>
-      <div data-i18n="footer.location">Based in the Miami area, working with businesses anywhere</div>
+      <span class="foot-brand">F&amp;F Web Systems</span>
+      <span data-i18n="footer.location">Based in the Miami area, working with businesses anywhere</span>
+      <a href="mailto:ffwebsystems@gmail.com" class="foot-email">ffwebsystems@gmail.com</a>
     </div>
-  </footer>
-</div>
+  </div>
+</footer>
 
 <script>
 /* ============================================================
@@ -378,9 +519,7 @@
    ============================================================ */
 
 // ---- CONFIG ----
-// Demo widget (salon/restaurant/auto/retail personas) — shared chatflow
 const FLOWISE_ENDPOINT = "https://api.ffwebsystems.com/api/v1/prediction/bcfb6705-fb65-4915-8321-fc6fd24a2d83";
-// Contact widget (real F&F leads) — dedicated chatflow, persona baked in server-side
 const CONTACT_ENDPOINT = "https://api.ffwebsystems.com/api/v1/prediction/01bf2899-7dbd-49a9-a5c0-bb2d739fb926";
 const USE_LIVE_FLOWISE = true;
 
@@ -455,15 +594,11 @@ function buildDemoPersona(biz, lang){
     langInstruction;
 }
 
-// The real F&F Web Systems assistant, used in the "Get in touch" section.
-// Its persona and instructions now live directly in the dedicated Flowise
-// chatflow's System Message (CONTACT_ENDPOINT above), not sent from here.
 const CONTACT_GREETING = {
   en: "Hi! Tell me a bit about your business and what you're looking for, and I'll get the team to follow up.",
   es: "¡Hola! Cuéntame un poco sobre tu negocio y qué necesitas, y haré que el equipo te contacte."
 };
 
-// ---- Static page text ----
 const I18N = {
   "nav.how": { en: "How it works", es: "Cómo funciona" },
   "nav.cta": { en: "Try the demo", es: "Probar la demo" },
@@ -508,9 +643,6 @@ const I18N_HTML = {
 
 let chatHistory = [];
 let currentType = "salon";
-// Unique per page load, and regenerated on every business switch, so each
-// visit and each persona starts a clean memory thread in Flowise instead of
-// reusing the same thread forever.
 let demoSessionId = "demo-" + currentType + "-" + Date.now();
 
 const bizOptionsEl = document.getElementById("bizOptions");
@@ -541,13 +673,10 @@ function applyLanguage(lang){
 
   langSwitchEl.textContent = lang === "en" ? "ES" : "EN";
 
-  // Refresh the demo widget's business picker labels and reset its greeting
   renderBizOptions();
   chatBodyEl.innerHTML = "";
   addMessage(chatBodyEl, "bot", BUSINESS_TYPES[currentType].greeting[lang]);
 
-  // Refresh the contact widget's greeting too, and clear tracked history since
-  // we're starting a fresh visible conversation.
   contactHistory = [];
   contactChatBodyEl.innerHTML = "";
   addMessage(contactChatBodyEl, "bot", CONTACT_GREETING[lang]);
@@ -598,9 +727,7 @@ async function getFlowiseReply(userText, persona, sessionId){
     body: JSON.stringify({
       question: userText,
       sessionId: sessionId,
-      overrideConfig: {
-        systemMessage: persona
-      }
+      overrideConfig: { systemMessage: persona }
     })
   });
   if (!res.ok) throw new Error("Request failed with status " + res.status);
@@ -608,12 +735,6 @@ async function getFlowiseReply(userText, persona, sessionId){
   return data.text || data.answer || "Sorry, I didn't catch that. Try asking again.";
 }
 
-// The contact widget's persona is now baked directly into its own dedicated
-// Flowise chatflow's System Message, so we don't send an override here.
-// Flowise's sessionId-based memory has proven unreliable in testing, so
-// instead we track the full conversation client-side and send it explicitly
-// on every request via the "history" field, which doesn't depend on Flowise
-// remembering anything between calls.
 let contactHistory = [];
 
 async function getContactReply(userText){
@@ -628,11 +749,8 @@ async function getContactReply(userText){
   if (!res.ok) throw new Error("Request failed with status " + res.status);
   const data = await res.json();
   const reply = data.text || data.answer || "Sorry, I didn't catch that. Try asking again.";
-
-  // Record both sides of this exchange so the next request carries full context.
   contactHistory.push({ role: "userMessage", content: userText });
   contactHistory.push({ role: "apiMessage", content: reply });
-
   return reply;
 }
 
@@ -641,9 +759,7 @@ async function handleSend(targetEl, inputEl, persona, sessionId){
   if (!text) return;
   inputEl.value = "";
   addMessage(targetEl, "user", text);
-
   const typingEl = showTyping(targetEl);
-
   try {
     const reply = await getFlowiseReply(text, persona, sessionId);
     typingEl.remove();
@@ -659,9 +775,7 @@ async function handleContactSend(){
   if (!text) return;
   contactChatInputEl.value = "";
   addMessage(contactChatBodyEl, "user", text);
-
   const typingEl = showTyping(contactChatBodyEl);
-
   try {
     const reply = await getContactReply(text);
     typingEl.remove();
@@ -672,24 +786,18 @@ async function handleContactSend(){
   }
 }
 
-// ---- Demo widget (business-type personas) ----
 chatSendEl.addEventListener("click", () => {
   handleSend(chatBodyEl, chatInputEl, buildDemoPersona(BUSINESS_TYPES[currentType], currentLang), demoSessionId);
 });
 chatInputEl.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    handleSend(chatBodyEl, chatInputEl, buildDemoPersona(BUSINESS_TYPES[currentType], currentLang), demoSessionId);
-  }
+  if (e.key === "Enter") handleSend(chatBodyEl, chatInputEl, buildDemoPersona(BUSINESS_TYPES[currentType], currentLang), demoSessionId);
 });
 
-// ---- Contact widget (real F&F assistant, captures real leads) ----
-// Uses its own dedicated chatflow and client-tracked history, see getContactReply above.
 contactChatSendEl.addEventListener("click", handleContactSend);
 contactChatInputEl.addEventListener("keydown", (e) => {
   if (e.key === "Enter") handleContactSend();
 });
 
-// ---- Language switch ----
 langSwitchEl.addEventListener("click", () => {
   applyLanguage(currentLang === "en" ? "es" : "en");
 });
