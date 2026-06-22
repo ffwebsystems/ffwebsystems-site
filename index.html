@@ -3,7 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>F&amp;F Web Systems: websites with AI built in</title>
+<title>F&F Web Systems — Websites with AI Built In | Miami, FL</title>
+<meta name="description" content="F&F Web Systems builds custom websites with AI assistants for local businesses in Miami. One setup fee, flat monthly rate. English and Spanish support.">
+<meta name="keywords" content="web design Miami, AI chatbot for small business, website with AI assistant, Miami web development, Hialeah website, local business website Miami">
+<meta name="author" content="F&F Web Systems">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://ffwebsystems.com/">
+
+<!-- Open Graph / Social preview -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ffwebsystems.com/">
+<meta property="og:title" content="F&F Web Systems — Websites with AI Built In">
+<meta property="og:description" content="We build websites for local Miami businesses with a trained AI assistant built right in. Visitors get answered 24/7, not just a contact form.">
+<meta property="og:image" content="https://ffwebsystems.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="F&F Web Systems — Websites with AI Built In">
+<meta name="twitter:description" content="Custom websites with AI assistants for local businesses in Miami. English and Spanish support.">
+
+<!-- JSON-LD LocalBusiness structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "F&F Web Systems",
+  "url": "https://ffwebsystems.com",
+  "email": "ffwebsystems@gmail.com",
+  "description": "F&F Web Systems builds custom websites with AI assistants for local businesses in the Miami area.",
+  "areaServed": {
+    "@type": "City",
+    "name": "Miami"
+  },
+  "serviceType": ["Web Design", "Web Development", "AI Chatbot Integration"],
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Miami",
+    "addressRegion": "FL",
+    "addressCountry": "US"
+  },
+  "inLanguage": ["en", "es"]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -267,6 +307,7 @@
     background:#fff;border-radius:16px;overflow:hidden;
     max-width:620px;
     box-shadow:0 4px 32px rgba(0,0,0,0.10);border:1px solid #E8EAED;
+    margin-bottom:80px;
   }
 
   /* PRICING SECTION */
@@ -319,6 +360,34 @@
   @media(max-width:860px){.pricing-grid{grid-template-columns:1fr;}}
   @media(max-width:600px){.pricing-notes-grid{grid-template-columns:1fr;}}
 
+  /* ABOUT SECTION */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+  .about-tag{
+    display:inline-flex;align-items:center;gap:7px;
+    font-family:var(--mono);font-size:11px;font-weight:700;
+    letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:20px;
+  }
+  .about-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);}
+  .about-h2{font-size:34px;font-weight:800;letter-spacing:-0.025em;color:#fff;margin-bottom:18px;line-height:1.15;}
+  .about-h2 em{font-style:normal;color:var(--accent);}
+  .about-body{font-size:16px;line-height:1.75;color:rgba(255,255,255,0.55);margin-bottom:16px;}
+  .about-sign{font-family:var(--mono);font-size:13px;color:rgba(255,255,255,0.35);margin-top:28px;}
+  .about-cards{display:flex;flex-direction:column;gap:14px;}
+  .about-card{
+    background:var(--night-3);
+    border:1px solid var(--night-border-strong);
+    border-radius:12px;padding:20px 22px;
+  }
+  .about-card-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:6px;letter-spacing:-0.01em;}
+  .about-card-body{font-size:13.5px;color:rgba(255,255,255,0.5);line-height:1.6;}
+  .about-stat{
+    display:flex;align-items:baseline;gap:8px;margin-bottom:8px;
+  }
+  .about-stat-num{font-size:28px;font-weight:800;color:var(--accent);letter-spacing:-0.03em;}
+  .about-stat-label{font-size:13px;color:rgba(255,255,255,0.45);}
+  @media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:40px;}}
+
   /* CTA BAND */
   .cta-band{background:var(--night);padding:88px 0;text-align:center;position:relative;overflow:hidden;}
   .cta-band::before{
@@ -360,6 +429,7 @@
       <div class="brand"><span class="mark">F&amp;F</span> F&amp;F Web Systems</div>
       <div class="navlinks">
         <a href="#how" data-i18n="nav.how">How it works</a>
+        <a href="#about" data-i18n="nav.about">About</a>
         <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
         <a href="mailto:ffwebsystems@gmail.com" class="nav-email">ffwebsystems@gmail.com</a>
       </div>
@@ -568,6 +638,40 @@
   </div>
 </div>
 
+<!-- ABOUT SECTION -->
+<section class="hero" id="about" style="padding:88px 0;">
+  <div class="wrap">
+    <div class="about-grid">
+      <div>
+        <div class="about-tag">About us</div>
+        <h2 class="about-h2">Two people from Miami,<br>building for <em>Miami businesses</em>.</h2>
+        <p class="about-body">F&F Web Systems is a two-person operation. We build websites and AI assistants for local businesses — the kind of shops where the owner answers the phone, knows regulars by name, and doesn't have time to mess around with tech.</p>
+        <p class="about-body">We grew up here. We know what a Hialeah salon owner needs is different from what a big agency would sell them. So we built a service that's direct, affordable, and actually works.</p>
+        <p class="about-body">One of us builds. One of us sells. No middlemen, no bloated timelines. You work with the people who made your site.</p>
+        <div class="about-sign">— Pedro &amp; Drewfig, F&amp;F Web Systems</div>
+      </div>
+      <div class="about-cards">
+        <div class="about-card">
+          <div class="about-stat"><span class="about-stat-num">24/7</span><span class="about-stat-label">your AI assistant is always on</span></div>
+          <div class="about-card-body">While you sleep, close up, or take a day off — your site keeps answering customers.</div>
+        </div>
+        <div class="about-card">
+          <div class="about-stat"><span class="about-stat-num">EN+ES</span><span class="about-stat-label">bilingual by default</span></div>
+          <div class="about-card-body">Every site and every AI assistant we build works in English and Spanish. Miami isn't one language.</div>
+        </div>
+        <div class="about-card">
+          <div class="about-stat"><span class="about-stat-num">~1 wk</span><span class="about-stat-label">average time from call to live site</span></div>
+          <div class="about-card-body">One short call to learn your business. Site up within the week. No months-long timelines.</div>
+        </div>
+        <div class="about-card">
+          <div class="about-card-title">Based in Miami. Built for Miami.</div>
+          <div class="about-card-body">We target local businesses in Miami and Hialeah. We know the market, the community, and what your customers actually expect.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <div class="cta-band">
   <div class="wrap">
     <h2 data-i18n="cta.h2">Try it, then reach out.</h2>
@@ -708,6 +812,7 @@ const CONTACT_GREETING = {
 
 const I18N = {
   "nav.how":              { en: "How it works",    es: "Cómo funciona" },
+  "nav.about":            { en: "About",            es: "Nosotros" },
   "nav.pricing":          { en: "Pricing",          es: "Precios" },
   "nav.cta":              { en: "Try the demo",     es: "Probar la demo" },
   "hero.eyebrow":         { en: "Websites for local businesses", es: "Sitios web para negocios locales" },
