@@ -271,14 +271,14 @@
     color:#8B6FA0;
   }
   .confirm-card-row{
-    display:flex;justify-content:space-between;align-items:center;
+    display:flex;flex-direction:column;gap:3px;
     padding:10px 16px;
     border-bottom:1px solid #F5EFF8;
     font-size:13px;
   }
   .confirm-card-row:last-of-type{border-bottom:none;}
-  .confirm-card-label{color:#9B8AAA;font-weight:500;}
-  .confirm-card-value{color:#2D1F3D;font-weight:700;text-align:right;max-width:60%;}
+  .confirm-card-label{color:#9B8AAA;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;}
+  .confirm-card-value{color:#2D1F3D;font-weight:700;font-size:14px;}
   .confirm-card-actions{
     display:flex;gap:8px;padding:10px 12px;
     border-top:1.5px solid #E8E0ED;
@@ -1097,7 +1097,6 @@ async function handleContactSend() {
     }
 
     // Detect natural language confirmation summary
-    // Matches "Just to confirm — your name is X, best way to reach you is Y..."
     const naturalConfirm = reply.match(/just to confirm[^a-z]*your name is ([^,]+),.*?reach you is ([^,]+),.*?run(?:s)? (?:a |an )?([\w\s]+),.*?looking for ([^.?]+)/i);
     if (naturalConfirm) {
       const data = {
@@ -1106,8 +1105,7 @@ async function handleContactSend() {
         business_type: naturalConfirm[3].trim(),
         summary:       naturalConfirm[4].trim()
       };
-      const cleanReply = reply.replace(/just to confirm[\s\S]*?is that right\??/i, "").trim();
-      if (cleanReply) addMessage(contactChatBodyEl, "bot", cleanReply);
+      addMessage(contactChatBodyEl, "bot", "Does that look right?");
       renderConfirmCard(data);
       return;
     }
