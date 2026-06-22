@@ -1080,62 +1080,6 @@ async function handleContactSend() {
   try {
     const reply = await getContactReply(text);
     typingEl.remove();
-    console.log("Flowise reply:", reply);
-
-    // Detect CONFIRM JSON block if Flowise outputs it
-    const confirmMatch = reply.match(/CONFIRM:\s*(\{"name"[\s\S]*?\})/);
-    if (confirmMatch) {
-      try {
-        const data = JSON.parse(confirmMatch[1]);
-        const cleanReply = reply.replace(/CONFIRM:\s*\{[\s\S]*?\}/, "").trim();
-        if (cleanReply) addMessage(contactChatBodyEl, "bot", cleanReply);
-        renderConfirmCard(data);
-        return;
-      } catch(e) {
-        console.log("CONFIRM parse error:", e);
-      }
-    }
-
-    // Detect natural language confirmation summary
-    const naturalConfirm = reply.match(/just to confirm[^a-z]*your name is ([^,]+),.*?reach you is ([^,]+),.*?run(?:s)? (?:a |an )?([\w\s]+),.*?looking for ([^.?]+)/i);
-    const looksLikeConfirm = /does that look right|is that right|here.*what i have|just to confirm|got it.*here/i.test(reply);
-
-    if (naturalConfirm) {
-      const data = {
-        name:          naturalConfirm[1].trim(),
-        contact:       naturalConfirm[2].trim(),
-        business_type: naturalConfirm[3].trim(),
-        summary:       naturalConfirm[4].trim()
-      };
-      addMessage(contactChatBodyEl, "bot", "Does that look right?");
-      renderConfirmCard(data);
-      return;
-    }
-
-    if (looksLikeConfirm) {
-      // Use full conversation including current exchange
-      const allText = contactHistory.map(h => h.content).join(" ") + " " + text;
-      const emailMatch = allText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
-      const phoneMatch = allText.match(/\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{4}/);
-      const nameMatch  = allText.match(/(?:my name is\s+|i(?:'m| am)\s+)([A-Za-z]+(?:\s[A-Za-z]+)?)/i);
-      const bizMatch   = allText.match(/(?:i (?:own|run|have|operate) (?:a |an )?)([\w\s]+?)(?:\.|,|\band\b| in | and)/i) ||
-                         allText.match(/(?:a |an )(barbershop|salon|restaurant|auto shop|retail|store|clinic|gym|spa|bakery|café|cafe|bar|hotel|school)/i);
-      const needMatch  = allText.match(/(?:i need|looking for|want)\s+([\w\s]+?)(?:\.|,|$)/i);
-
-      const data = {
-        name:          nameMatch  ? nameMatch[1].trim() : null,
-        contact:       emailMatch ? emailMatch[0] : phoneMatch ? phoneMatch[0] : null,
-        business_type: bizMatch   ? (bizMatch[1] || bizMatch[2] || "").trim() : null,
-        summary:       needMatch  ? needMatch[1].trim() : text
-      };
-
-      if (data.name || data.contact) {
-        addMessage(contactChatBodyEl, "bot", "Does that look right?");
-        renderConfirmCard(data);
-        return;
-      }
-    }
-
     addMessage(contactChatBodyEl, "bot", reply);
   } catch (err) {
     typingEl.remove();
