@@ -1117,16 +1117,18 @@ async function handleContactSend() {
       const allMessages = contactHistory.map(h => h.content).join(" ");
       const emailMatch   = allMessages.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
       const phoneMatch   = allMessages.match(/\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{4}/);
-      const nameMatch    = allMessages.match(/(?:my name is|name(?:\s+is)?[:\s]+)([A-Za-z]+(?:\s[A-Za-z]+)?)/i);
-      const bizMatch     = allMessages.match(/(?:i (?:own|run|have|operate) (?:a |an )?)([\w\s]+?)(?:\.|,|\band\b| in )/i);
+      const nameMatch    = allMessages.match(/(?:my name is|i(?:'m| am) called|name[:\s]+)([A-Za-z]+(?:\s[A-Za-z]+)?)/i) ||
+                           allMessages.match(/(?:^|[\.,]\s*)([A-Z][a-z]+)(?:\s*[,.]|\s+I )/);
+      const bizMatch     = allMessages.match(/(?:i (?:own|run|have|operate) (?:a |an )?)([\w\s]+?)(?:\.|,|\band\b| in | and)/i) ||
+                           allMessages.match(/(?:a |an )(barbershop|salon|restaurant|auto shop|retail|store|clinic|gym|spa|bakery|café|cafe|bar|hotel|school)([\s,.])/i);
+      const needMatch    = allMessages.match(/(?:i need|looking for|want)([\w\s]+?)(?:\.|,|$)/i);
       const userMessages = contactHistory.filter(h => h.role === "userMessage").map(h => h.content);
-      const lastUserMsg  = userMessages[userMessages.length - 1] || "";
 
       const data = {
-        name:          nameMatch  ? nameMatch[1].trim()  : null,
+        name:          nameMatch  ? (nameMatch[1] || nameMatch[2] || "").trim().replace(/^is\s+/i, "") : null,
         contact:       emailMatch ? emailMatch[0] : phoneMatch ? phoneMatch[0] : null,
-        business_type: bizMatch   ? bizMatch[1].trim()   : null,
-        summary:       lastUserMsg
+        business_type: bizMatch   ? (bizMatch[1] || bizMatch[2] || "").trim()  : null,
+        summary:       needMatch  ? needMatch[1].trim() : userMessages[userMessages.length - 1] || null
       };
 
       if (data.name || data.contact) {
