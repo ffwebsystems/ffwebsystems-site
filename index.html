@@ -257,7 +257,7 @@
   .confirm-card{
     align-self:flex-start;
     background:#fff;
-    border:1.5px solid #E8E0ED;
+    border:1.5px solid #C8CBD4;
     border-radius:12px;
     overflow:hidden;
     width:100%;
@@ -265,33 +265,33 @@
     font-family:var(--sans);
   }
   .confirm-card-header{
-    background:#F5EFF8;
+    background:var(--accent-soft);
     padding:10px 16px;
     font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
-    color:#8B6FA0;
+    color:var(--accent-dark);
   }
   .confirm-card-row{
     display:flex;flex-direction:column;gap:3px;
     padding:10px 16px;
-    border-bottom:1px solid #F5EFF8;
+    border-bottom:1px solid #F0F2F5;
     font-size:13px;
   }
   .confirm-card-row:last-of-type{border-bottom:none;}
-  .confirm-card-label{color:#9B8AAA;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;}
-  .confirm-card-value{color:#2D1F3D;font-weight:700;font-size:14px;}
+  .confirm-card-label{color:#9299A6;font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;}
+  .confirm-card-value{color:var(--ink);font-weight:700;font-size:14px;}
   .confirm-card-actions{
     display:flex;gap:8px;padding:10px 12px;
-    border-top:1.5px solid #E8E0ED;
-    background:#FDFAFF;
+    border-top:1px solid #E8EAED;
+    background:#F7F8FA;
   }
   .confirm-btn{
-    flex:1;padding:10px;border-radius:20px;font-size:13px;font-weight:600;
+    flex:1;padding:10px;border-radius:8px;font-size:13px;font-weight:600;
     cursor:pointer;font-family:var(--sans);transition:all .15s;border:none;
   }
-  .confirm-btn.primary{background:#7C4DA0;color:#fff;}
-  .confirm-btn.primary:hover{background:#6a3d8a;}
-  .confirm-btn.secondary{background:#fff;color:#7C4DA0;border:1.5px solid #C9B4D9;}
-  .confirm-btn.secondary:hover{background:#F5EFF8;}
+  .confirm-btn.primary{background:var(--accent);color:#fff;}
+  .confirm-btn.primary:hover{opacity:0.88;}
+  .confirm-btn.secondary{background:#fff;color:var(--ink-soft);border:1.5px solid #C8CBD4;}
+  .confirm-btn.secondary:hover{border-color:var(--accent);color:var(--accent);}
 
   /* Input bar */
   .chat-input-row{
@@ -1098,6 +1098,8 @@ async function handleContactSend() {
 
     // Detect natural language confirmation summary
     const naturalConfirm = reply.match(/just to confirm[^a-z]*your name is ([^,]+),.*?reach you is ([^,]+),.*?run(?:s)? (?:a |an )?([\w\s]+),.*?looking for ([^.?]+)/i);
+    const looksLikeConfirm = /does that look right|is that right|here.*what i have|just to confirm|got it.*here/i.test(reply);
+
     if (naturalConfirm) {
       const data = {
         name:          naturalConfirm[1].trim(),
@@ -1108,6 +1110,30 @@ async function handleContactSend() {
       addMessage(contactChatBodyEl, "bot", "Does that look right?");
       renderConfirmCard(data);
       return;
+    }
+
+    if (looksLikeConfirm) {
+      // Extract from full conversation history
+      const allMessages = contactHistory.map(h => h.content).join(" ");
+      const emailMatch   = allMessages.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+      const phoneMatch   = allMessages.match(/\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{4}/);
+      const nameMatch    = allMessages.match(/(?:my name is|name(?:\s+is)?[:\s]+)([A-Za-z]+(?:\s[A-Za-z]+)?)/i);
+      const bizMatch     = allMessages.match(/(?:i (?:own|run|have|operate) (?:a |an )?)([\w\s]+?)(?:\.|,|\band\b| in )/i);
+      const userMessages = contactHistory.filter(h => h.role === "userMessage").map(h => h.content);
+      const lastUserMsg  = userMessages[userMessages.length - 1] || "";
+
+      const data = {
+        name:          nameMatch  ? nameMatch[1].trim()  : null,
+        contact:       emailMatch ? emailMatch[0] : phoneMatch ? phoneMatch[0] : null,
+        business_type: bizMatch   ? bizMatch[1].trim()   : null,
+        summary:       lastUserMsg
+      };
+
+      if (data.name || data.contact) {
+        addMessage(contactChatBodyEl, "bot", "Does that look right?");
+        renderConfirmCard(data);
+        return;
+      }
     }
 
     addMessage(contactChatBodyEl, "bot", reply);
