@@ -1,0 +1,1929 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Berenice Beauty — Portal</title>
+<style>
+:root {
+  --bg:#F9F5F0; --surface:#fff; --surface2:#F3EDE6;
+  --ink:#1C1612; --ink-soft:#6B5E54; --line:#E8DDD5;
+  --brand:#8B4A6B; --brand-light:#F5E8F0; --brand-deep:#612040;
+  --gold-light:#FDF3E3; --green-light:#E8F5EE;
+  --red:#C0392B; --red-light:#FDECEA;
+  --radius:14px; --shadow:0 2px 16px rgba(28,22,18,.09);
+  --tap:52px; /* minimum tap target height */
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;height:-webkit-fill-available;}
+body{
+  font-family:-apple-system,"Helvetica Neue",system-ui,sans-serif;
+  background:var(--bg);color:var(--ink);
+  min-height:100vh;min-height:-webkit-fill-available;
+  font-size:16px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  overflow-x:hidden;
+}
+
+/* TOPBAR */
+.topbar{
+  background:var(--brand-deep);color:#fff;
+  height:60px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;position:sticky;top:0;z-index:200;
+  padding-top:env(safe-area-inset-top);
+}
+.topbar-logo{font-family:Georgia,serif;font-size:18px;letter-spacing:.04em;}
+.topbar-logo span{color:#E8B4D0;}
+.btn-signout{
+  background:rgba(255,255,255,.18);border:none;color:#fff;
+  padding:8px 16px;border-radius:8px;font-size:14px;cursor:pointer;
+  min-height:var(--tap);display:flex;align-items:center;
+}
+
+/* LOGIN */
+#login-screen{
+  min-height:calc(100vh - 60px);
+  display:flex;align-items:center;justify-content:center;
+  padding:32px 20px;
+}
+.login-wrap{width:100%;max-width:380px;}
+.login-title{font-family:Georgia,serif;font-size:28px;font-weight:normal;text-align:center;margin-bottom:6px;color:var(--brand-deep);}
+.login-sub{text-align:center;color:var(--ink-soft);font-size:15px;margin-bottom:36px;}
+.pin-label{font-size:14px;font-weight:600;color:var(--ink-soft);margin-bottom:12px;text-align:center;}
+.pin-row{display:flex;gap:12px;justify-content:center;margin-bottom:20px;}
+.pin-dot-display{
+  width:58px;height:64px;border:2px solid var(--line);border-radius:10px;
+  font-size:28px;font-weight:700;text-align:center;color:var(--brand-deep);
+  background:var(--bg);display:flex;align-items:center;justify-content:center;
+  transition:border-color .15s, background .15s;
+}
+.pin-dot-display.filled{border-color:var(--brand-deep);background:#fff;}
+.pin-dot-display.active{border-color:var(--brand);background:#fff;}
+.pin-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:280px;margin:0 auto 16px;}
+.pin-key{
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  height:64px;font-size:22px;font-weight:500;cursor:pointer;
+  -webkit-appearance:none;transition:background .1s;
+  display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:rgba(139,74,107,.15);
+  user-select:none;-webkit-user-select:none;
+  touch-action:manipulation;
+}
+.pin-key:active{background:var(--brand-light);}
+.pin-key.del{font-size:16px;color:var(--ink-soft);}
+.pin-error{text-align:center;font-size:14px;color:var(--red);min-height:22px;margin-bottom:10px;}
+.btn-login{
+  width:100%;height:56px;border-radius:10px;
+  background:var(--brand-deep);color:#fff;border:none;
+  font-size:16px;font-weight:600;cursor:pointer;
+  -webkit-appearance:none;
+}
+.btn-login:active{background:var(--brand);}
+
+/* APP */
+#app{display:none;}
+
+/* TABS */
+.tabs{
+  background:var(--surface);border-bottom:2px solid var(--line);
+  display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;padding:0 8px;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  padding:0 20px;height:52px;font-size:15px;font-weight:500;
+  color:var(--ink-soft);cursor:pointer;
+  border:none;border-bottom:3px solid transparent;
+  background:none;white-space:nowrap;
+  display:flex;align-items:center;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;-webkit-user-select:none;
+  min-width:88px;justify-content:center;
+}
+.tab.active{color:var(--brand-deep);border-bottom-color:var(--brand-deep);font-weight:600;}
+
+/* PAGES */
+.page{display:none;padding:24px 20px;max-width:1160px;margin:0 auto;padding-bottom:40px;}
+.page.active{display:block;}
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.sec-title{font-family:Georgia,serif;font-size:22px;font-weight:normal;}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}
+@media(min-width:700px){.stats-row{grid-template-columns:repeat(4,1fr);}}
+.stat-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;}
+.stat-label{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);font-weight:600;margin-bottom:6px;}
+.stat-value{font-family:Georgia,serif;font-size:28px;color:var(--brand-deep);}
+.stat-sub{font-size:12px;color:var(--ink-soft);margin-top:3px;}
+
+/* STAFF REVENUE CARDS */
+.staff-grid-rev{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}
+@media(min-width:700px){.staff-grid-rev{grid-template-columns:repeat(3,1fr);}}
+@media(min-width:900px){.staff-grid-rev{grid-template-columns:repeat(5,1fr);}}
+.staff-rev-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:12px;min-width:0;overflow:hidden;}
+.src-info .name{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.src-info .role{font-size:12px;color:var(--ink-soft);margin-top:1px;}
+.src-rev{margin-left:auto;text-align:right;}
+.src-rev .amt{font-family:Georgia,serif;font-size:20px;color:var(--brand-deep);}
+.src-rev .lbl{font-size:11px;color:var(--ink-soft);}
+
+/* CARD / TABLE */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:20px;overflow:hidden;}
+.card-head{
+  padding:14px 18px;border-bottom:1px solid var(--line);
+  font-weight:600;font-size:15px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;font-size:15px;}
+th{
+  text-align:left;padding:11px 14px;
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+  color:var(--ink-soft);border-bottom:1px solid var(--line);background:var(--surface2);
+  white-space:nowrap;
+}
+td{padding:14px 14px;border-bottom:1px solid var(--line);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+
+/* BUTTONS — larger for touch */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:0 18px;height:var(--tap);border-radius:10px;
+  font-size:15px;font-weight:500;cursor:pointer;border:none;
+  -webkit-appearance:none;
+  user-select:none;-webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-primary{background:var(--brand-deep);color:#fff;}
+.btn-primary:active{background:var(--brand);}
+.btn-ghost{background:none;border:1.5px solid var(--line);color:var(--ink-soft);}
+.btn-ghost:active{border-color:var(--brand);color:var(--brand);}
+.btn-sm{height:38px;padding:0 14px;font-size:13px;border-radius:8px;}
+.btn-danger{background:var(--red);color:#fff;}
+.btn-danger:active{opacity:.85;}
+
+/* BADGES */
+.badge{display:inline-block;padding:5px 11px;border-radius:20px;font-size:12px;font-weight:700;}
+.badge-scheduled{background:var(--gold-light);color:#8A5A10;}
+.badge-completed{background:var(--green-light);color:#1E5C3A;}
+.badge-cancelled{background:var(--red-light);color:var(--red);}
+
+/* FORM — iPad-friendly inputs */
+.form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:18px;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group.full{grid-column:1/-1;}
+label{font-size:13px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;}
+input,select,textarea{
+  height:50px;padding:0 14px;
+  border:1.5px solid var(--line);border-radius:10px;
+  font-size:16px;/* 16px prevents iOS zoom */
+  font-family:inherit;color:var(--ink);
+  background:var(--bg);width:100%;
+  -webkit-appearance:none;appearance:none;
+  transition:border-color .15s;
+}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B5E54' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;}
+textarea{height:auto;min-height:80px;padding:14px;resize:none;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand);background:#fff;}
+
+/* MODAL */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.45);z-index:300;
+  align-items:flex-end;justify-content:center;
+  padding:0;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--surface);
+  border-radius:20px 20px 0 0;
+  width:100%;max-width:640px;
+  max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  box-shadow:0 -4px 32px rgba(0,0,0,.18);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+@media(min-width:700px){
+  .modal-overlay{align-items:center;padding:20px;}
+  .modal{border-radius:16px;max-height:88vh;}
+}
+.modal-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 22px 16px;border-bottom:1px solid var(--line);
+  position:sticky;top:0;background:var(--surface);z-index:1;
+}
+.modal-title{font-family:Georgia,serif;font-size:18px;}
+.modal-close{
+  background:var(--surface2);border:none;border-radius:50%;
+  width:36px;height:36px;font-size:18px;cursor:pointer;
+  color:var(--ink-soft);display:flex;align-items:center;justify-content:center;
+}
+.modal-body{padding:20px 22px;}
+.modal-foot{
+  padding:16px 22px;border-top:1px solid var(--line);
+  display:flex;gap:10px;justify-content:flex-end;
+  position:sticky;bottom:0;background:var(--surface);
+}
+
+/* AVATAR / PILLS */
+.avatar{
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:700;color:#fff;flex-shrink:0;
+}
+.client-pill{display:flex;align-items:center;gap:10px;}
+.pill-name{font-weight:500;font-size:15px;}
+.pill-phone{font-size:13px;color:var(--ink-soft);}
+.staff-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--surface2);border-radius:20px;
+  padding:4px 10px;font-size:13px;font-weight:600;white-space:nowrap;
+}
+
+/* STAFF COLORS */
+.col-0{background:#7C5CBF;}
+.col-1{background:#C0572B;}
+.col-2{background:#2B7AC0;}
+.col-3{background:#B06A3A;}
+.col-4{background:#2B9E68;}
+
+/* SEARCH */
+.search-row{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.search-row input{max-width:260px;}
+.search-row select{max-width:190px;}
+.date-filter{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.date-filter label{text-transform:none;font-size:14px;letter-spacing:0;color:var(--ink-soft);}
+.date-filter input{max-width:160px;height:44px;}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:48px 20px;color:var(--ink-soft);}
+.empty-state .icon{font-size:36px;margin-bottom:12px;}
+.empty-state p{font-size:15px;}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+  background:#1C1612;color:#fff;padding:12px 22px;border-radius:10px;
+  font-size:15px;opacity:0;pointer-events:none;transition:opacity .22s;z-index:400;
+  white-space:nowrap;
+}
+.toast.show{opacity:1;}
+
+/* SECTION LABEL */
+.section-label{font-size:12px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px;}
+
+/* AI BOOKING */
+#page-ai{display:none;padding:0;max-width:100%;}
+#page-ai.active{display:flex;flex-direction:column;height:calc(100vh - 112px);}
+.ai-header{padding:20px 20px 14px;border-bottom:1px solid var(--line);background:var(--surface);flex-shrink:0;}
+.ai-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.ai-title{font-family:Georgia,serif;font-size:20px;font-weight:normal;}
+.ai-sub{font-size:13px;color:var(--ink-soft);}
+.ai-messages{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px;display:flex;flex-direction:column;gap:14px;}
+.ai-bubble{max-width:82%;padding:14px 16px;border-radius:16px;font-size:15px;line-height:1.5;}
+.ai-bubble.ai{background:var(--brand-light);color:var(--ink);border-bottom-left-radius:4px;align-self:flex-start;}
+.ai-bubble.ai .bubble-label{font-size:11px;font-weight:700;color:var(--brand-deep);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.ai-bubble.user{background:var(--brand-deep);color:#fff;border-bottom-right-radius:4px;align-self:flex-end;}
+.ai-bubble.system{background:var(--green-light);color:#1E5C3A;border-radius:10px;align-self:center;font-size:13px;font-weight:600;text-align:center;max-width:90%;}
+.ai-bubble.error{background:var(--red-light);color:var(--red);border-radius:10px;align-self:center;font-size:14px;text-align:center;max-width:90%;}
+.ai-options{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.ai-opt{background:var(--surface);border:1.5px solid var(--brand);color:var(--brand-deep);border-radius:20px;padding:8px 16px;font-size:14px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;}
+.ai-opt:active{background:var(--brand-light);}
+.ai-thinking{display:flex;gap:5px;align-items:center;padding:14px 16px;}
+.ai-thinking span{width:8px;height:8px;background:var(--brand);border-radius:50%;animation:bounce 1.2s infinite;}
+.ai-thinking span:nth-child(2){animation-delay:.2s;}
+.ai-thinking span:nth-child(3){animation-delay:.4s;}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}}
+.ai-input-row{padding:12px 16px;border-top:1px solid var(--line);background:var(--surface);display:flex;gap:10px;align-items:flex-end;flex-shrink:0;padding-bottom:max(12px,env(safe-area-inset-bottom));}
+.ai-input{flex:1;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font-size:16px;font-family:inherit;color:var(--ink);background:var(--bg);resize:none;max-height:100px;overflow-y:auto;-webkit-appearance:none;outline:none;line-height:1.4;}
+.ai-input:focus{border-color:var(--brand);background:#fff;}
+.ai-send{width:48px;height:48px;background:var(--brand-deep);border:none;border-radius:12px;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
+.ai-send:active{background:var(--brand);}
+.ai-send:disabled{background:var(--line);cursor:default;}
+.ai-confirm-card{background:var(--surface);border:1.5px solid var(--brand);border-radius:14px;padding:16px;margin-top:10px;font-size:14px;}
+.ai-confirm-card .row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line);}
+.ai-confirm-card .row:last-child{border-bottom:none;}
+.ai-confirm-card .row .lbl{color:var(--ink-soft);font-weight:500;}
+.ai-confirm-card .row .val{font-weight:600;color:var(--ink);text-align:right;}
+
+/* ═══════════════════════════════════════
+   IPHONE ONLY — max 480px
+   Tables → cards, bigger taps, bottom nav
+═══════════════════════════════════════ */
+@media(max-width:480px){
+  /* TOPBAR */
+  .topbar-logo{font-size:15px;}
+  #topbar-date{display:none;}
+  .btn-signout{padding:6px 12px;font-size:13px;}
+
+  /* PAGES */
+  .page{padding:14px 12px 80px;}
+
+  /* BOTTOM TAB BAR */
+  .tabs{
+    position:fixed;bottom:0;left:0;right:0;
+    background:var(--surface);border-top:1px solid var(--line);border-bottom:none;
+    display:grid;grid-template-columns:repeat(5,1fr);
+    padding:0;z-index:150;
+    padding-bottom:env(safe-area-inset-bottom);
+    box-shadow:0 -2px 12px rgba(0,0,0,.08);
+  }
+  .tab{
+    height:56px;padding:0 4px;font-size:11px;font-weight:500;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:3px;border-bottom:none;border-top:3px solid transparent;min-width:0;
+  }
+  .tab.active{border-top-color:var(--brand-deep);border-bottom:none;color:var(--brand-deep);}
+  .tab::before{font-size:18px;line-height:1;}
+  #tab-bar button:nth-child(1)::before{content:"📊";}
+  #tab-bar button:nth-child(2)::before{content:"📅";}
+  #tab-bar button:nth-child(3)::before{content:"👤";}
+  #tab-bar button:nth-child(4)::before{content:"💰";}
+  #tab-bar button:nth-child(5)::before{content:"✦";}
+  #tab-bar button:nth-child(6)::before{content:"⬆";}
+
+  /* STATS — 2 col */
+  .stats-row{grid-template-columns:1fr 1fr;gap:10px;}
+  .stat-value{font-size:22px;}
+
+  /* STAFF REV CARDS — single col */
+  .staff-grid-rev{grid-template-columns:1fr;}
+  .staff-rev-card{padding:12px 14px;}
+
+  /* HIDE TABLES */
+  .tbl-wrap table{display:none;}
+
+  /* APPOINTMENT CARDS */
+  .appt-cards{display:flex;flex-direction:column;gap:10px;padding:12px;}
+  .appt-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;}
+  .appt-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+  .appt-card-name{font-weight:700;font-size:15px;}
+  .appt-card-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-soft);margin-top:5px;}
+  .appt-card-row span:last-child{color:var(--ink);font-weight:500;}
+  .appt-card-actions{display:flex;gap:8px;margin-top:12px;}
+  .appt-card-actions .btn{flex:1;justify-content:center;height:40px;}
+
+  /* CLIENT CARDS */
+  .client-cards{display:flex;flex-direction:column;gap:10px;padding:12px;}
+  .client-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;}
+  .client-card-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .client-card-info{flex:1;}
+  .client-card-name{font-weight:700;font-size:15px;}
+  .client-card-phone{font-size:13px;color:var(--ink-soft);}
+  .client-card-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px;}
+  .client-card-stat{background:var(--surface2);border-radius:8px;padding:8px 10px;text-align:center;}
+  .client-card-stat .v{font-family:Georgia,serif;font-size:16px;color:var(--brand-deep);}
+  .client-card-stat .l{font-size:10px;color:var(--ink-soft);margin-top:1px;}
+  .client-card-actions{margin-top:10px;}
+
+  /* HISTORY CARDS */
+  .hist-cards{display:flex;flex-direction:column;gap:10px;padding:12px;}
+  .hist-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;}
+  .hist-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+  .hist-card-name{font-weight:700;font-size:15px;}
+  .hist-card-row{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-soft);margin-top:4px;}
+  .hist-card-row span:last-child{color:var(--ink);font-weight:500;}
+
+  /* SEC HEADER on phone */
+  .sec-header{margin-bottom:14px;}
+  .sec-title{font-size:18px;}
+  .btn{height:44px;font-size:14px;}
+  .btn-sm{height:36px;font-size:12px;}
+
+  /* SEARCH ROW */
+  .search-row{gap:8px;}
+  .search-row input,.search-row select{max-width:100%;font-size:15px;}
+
+  /* FORM GRID — single col on phone */
+  .form-grid{grid-template-columns:1fr;}
+
+  /* AI PAGE on phone */
+  #page-ai.active{height:calc(100vh - 116px);}
+
+  /* MODAL full screen on phone */
+  .modal{border-radius:20px 20px 0 0;max-height:95vh;}
+}
+
+
+/* ═══════════════════════════════════════
+   TABLET / IPAD (481px – 1024px)
+═══════════════════════════════════════ */
+@media(min-width:481px) and (max-width:1024px){
+  .page{padding:20px 18px 40px;}
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .staff-grid-rev{grid-template-columns:repeat(3,1fr);}
+  .form-grid{grid-template-columns:repeat(2,1fr);}
+  .modal{max-width:600px;border-radius:16px;}
+  .modal-overlay{align-items:center;padding:20px;}
+  .tabs{padding:0 12px;}
+  .tab{padding:0 16px;font-size:14px;}
+  .week-grid{grid-template-columns:repeat(7,1fr);}
+  .week-day{min-height:80px;}
+  .sec-title{font-size:20px;}
+  .stat-value{font-size:24px;}
+}
+
+/* ═══════════════════════════════════════
+   DESKTOP (1025px+)
+═══════════════════════════════════════ */
+@media(min-width:1025px){
+  .page{padding:28px 32px 48px;max-width:1200px;}
+  .stats-row{grid-template-columns:repeat(4,1fr);}
+  .staff-grid-rev{grid-template-columns:repeat(5,1fr);}
+  .modal-overlay{align-items:center;padding:20px;}
+  .modal{border-radius:16px;}
+  .week-grid{grid-template-columns:repeat(7,1fr);}
+  .week-day{min-height:90px;}
+  tr:hover td{background:var(--brand-light);}
+}
+
+/* ═══════════════════════════════════════
+   UNIVERSAL FIXES
+═══════════════════════════════════════ */
+
+/* Tables always scroll horizontally on all devices */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;}
+
+/* Sec header always wraps cleanly */
+.sec-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;}
+
+/* Week nav wraps on smaller iPad */
+.week-nav{flex-wrap:nowrap;overflow-x:auto;}
+
+/* Search row wraps cleanly */
+.search-row{flex-wrap:wrap;}
+.search-row input,.search-row select{min-width:160px;}
+
+/* Card head wraps */
+.card-head{flex-wrap:wrap;}
+
+/* Staff grid never overflows */
+.staff-grid-rev{overflow:visible;}
+.staff-rev-card{min-width:0;word-break:break-word;}
+.staff-rev-card-wrap{min-width:0;}
+
+/* Import page textarea full width always */
+#imp-bulk-text{width:100% !important;min-width:0;}
+
+/* AI page height fix for all devices */
+#page-ai.active{
+  height:calc(100vh - 112px);
+  min-height:400px;
+}
+
+/* Modal always centers on non-phone */
+@media(min-width:481px){
+  .modal-overlay{align-items:center;padding:24px;}
+  .modal{border-radius:16px;max-height:85vh;}
+}
+
+/* Prevent horizontal scroll on body */
+html,body{max-width:100%;overflow-x:hidden;}
+
+/* Topbar date hides on narrow tablets */
+@media(max-width:680px){
+  #topbar-date{display:none;}
+}
+
+/* Week grid min cell size */
+.week-day{min-width:40px;}
+.week-day-name{font-size:10px;}
+.week-day-num{font-size:16px;}
+
+/* Hide phone cards by default, show only on small screens */
+.appt-cards, .client-cards, .hist-cards {display:none;}
+@media(max-width:480px){
+  .appt-cards, .client-cards, .hist-cards {display:flex;}
+}
+
+/* WEEK NAVIGATION */
+.week-nav{display:flex;align-items:center;gap:4px;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:4px;}
+.week-arrow{background:none;border:none;font-size:22px;cursor:pointer;color:var(--ink-soft);width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:6px;font-weight:300;transition:background .12s;}
+.week-arrow:hover{background:var(--brand-light);color:var(--brand-deep);}
+.week-arrow:active{background:var(--brand-light);}
+
+/* WEEK GRID */
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;overflow-x:auto;}
+.week-day{background:var(--surface);border:1.5px solid var(--line);border-radius:10px;min-height:90px;cursor:pointer;transition:all .15s;padding:8px 6px;}
+.week-day:hover{border-color:var(--brand);background:var(--brand-light);}
+.week-day.today{border-color:var(--brand-deep);background:var(--brand-light);}
+.week-day.selected{border-color:var(--brand-deep);background:var(--brand-deep);color:#fff;}
+.week-day.has-appts{border-color:var(--brand);}
+.week-day-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;opacity:.6;margin-bottom:2px;}
+.week-day-num{font-family:Georgia,serif;font-size:20px;font-weight:normal;margin-bottom:6px;}
+.week-day-dots{display:flex;flex-wrap:wrap;gap:3px;}
+.week-dot{width:7px;height:7px;border-radius:50%;background:var(--brand);}
+.week-day.selected .week-dot{background:#fff;}
+.week-day-count{font-size:11px;font-weight:600;margin-top:4px;color:var(--brand-deep);}
+.week-day.selected .week-day-count{color:#fff;}
+
+@media(max-width:480px){
+  .week-grid{grid-template-columns:repeat(7,minmax(44px,1fr));}
+  .week-day{min-height:70px;padding:6px 4px;}
+  .week-day-num{font-size:16px;}
+  .week-nav{flex-wrap:wrap;}
+}
+
+/* OVERVIEW STAFF CARDS WITH APPOINTMENTS */
+.staff-grid-rev{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:24px;}
+.staff-rev-card-wrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+.staff-rev-card-top{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);}
+.src-info{min-width:0;flex:1;}
+.src-info .name{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.src-info .role{font-size:12px;color:var(--ink-soft);margin-top:1px;}
+.src-rev{text-align:right;flex-shrink:0;}
+.src-rev .amt{font-family:Georgia,serif;font-size:18px;color:var(--brand-deep);}
+.src-rev .lbl{font-size:11px;color:var(--ink-soft);}
+.ov-appt-list{padding:8px 12px;display:flex;flex-direction:column;gap:6px;}
+.ov-appt-row{display:flex;align-items:center;gap:8px;font-size:13px;padding:4px 0;border-bottom:1px solid var(--line);flex-wrap:wrap;}
+.ov-appt-row:last-child{border-bottom:none;}
+.ov-appt-time{font-weight:600;color:var(--ink-soft);min-width:36px;flex-shrink:0;}
+.ov-appt-name{font-weight:600;color:var(--ink);flex:1;min-width:80px;}
+.ov-appt-service{color:var(--ink-soft);font-size:12px;}
+.ov-appt-price{font-weight:700;color:var(--brand-deep);margin-left:auto;}
+.ov-appt-empty{font-size:13px;color:var(--ink-soft);padding:6px 0;text-align:center;font-style:italic;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">Berenice <span>Beauty</span></div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span id="topbar-date" style="font-size:13px;opacity:.7;white-space:nowrap;"></span>
+    <button class="btn-signout" onclick="signOut()">Cerrar sesión</button>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-wrap">
+    <div class="login-title">Portal de Administración</div>
+    <div class="login-sub">Berenice Beauty Salon</div>
+    <div class="pin-label">Ingrese su PIN</div>
+    <div class="pin-row" id="pin-dots-row" onclick="document.getElementById('pin-keyboard-input').focus()" style="cursor:text;">
+      <div class="pin-dot-display" id="pd0"></div>
+      <div class="pin-dot-display" id="pd1"></div>
+      <div class="pin-dot-display" id="pd2"></div>
+      <div class="pin-dot-display" id="pd3"></div>
+    </div>
+    <input type="password" id="pin-keyboard-input" inputmode="numeric" maxlength="4"
+      placeholder="PIN" autocomplete="off" autocorrect="off" spellcheck="false"
+      oninput="onPinKeyboardInput(this)" onkeydown="onPinKeydown(event)"
+      style="opacity:0;position:absolute;pointer-events:none;width:1px;height:1px;">
+    <div class="pin-keypad" id="pin-keypad"></div>
+    <div class="pin-error" id="pin-error"></div>
+    <button class="btn-login" onclick="submitPin()">Entrar</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="tabs" id="tab-bar">
+    <button class="tab active" onclick="showPage('overview')">Resumen</button>
+    <button class="tab" onclick="showPage('appointments')">Citas</button>
+    <button class="tab" onclick="showPage('clients')">Clientes</button>
+    <button class="tab" onclick="showPage('history')">Historial de Precios</button>
+    <button class="tab" onclick="showPage('ai')">✦ Cita con IA</button>
+    <button class="tab" onclick="showPage('import')">+ Agregar Clientes</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="page active" id="page-overview">
+    <div class="sec-header">
+      <div>
+        <div class="sec-title">Resumen de Hoy</div>
+        <div style="font-size:13px;color:var(--ink-soft);margin-top:2px;" id="ov-today-label"></div>
+      </div>
+      <button class="btn btn-primary" onclick="openApptModal()">+ Agregar cita</button>
+    </div>
+    <div class="stats-row" id="ov-stats"></div>
+    <div class="section-label">Ingresos por empleada</div>
+    <div class="staff-grid-rev" id="staff-rev-grid"></div>
+    <div class="card">
+      <div class="card-head">
+        <span id="ov-day-label">Citas de hoy</span>
+        <button class="btn btn-primary btn-sm" onclick="openApptModal()">+ Agregar cita</button>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Empleada</th><th>Cliente</th><th>Servicio</th><th>Hora</th><th>Precio</th><th>Estado</th><th></th></tr></thead>
+          <tbody id="ov-appt-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPOINTMENTS -->
+  <div class="page" id="page-appointments">
+    <div class="sec-header" style="flex-wrap:wrap;gap:12px;">
+      <div class="sec-title">Citas</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <div class="week-nav">
+          <button class="week-arrow" onclick="shiftWeek(-1)">&#8249;</button>
+          <span id="week-label" style="font-size:13px;font-weight:600;color:var(--ink-soft);min-width:140px;text-align:center;"></span>
+          <button class="week-arrow" onclick="shiftWeek(1)">&#8250;</button>
+          <button class="week-arrow" onclick="goToToday()" style="font-size:12px;padding:0 10px;width:auto;">Hoy</button>
+        </div>
+        <input type="date" id="appt-date-filter" onchange="onDatePickerChange()" style="height:40px;font-size:14px;border-radius:8px;border:1.5px solid var(--line);padding:0 10px;background:var(--bg);color:var(--ink);">
+        <button class="btn btn-ghost btn-sm" onclick="toggleWeekView()" id="week-view-btn">Ver semana</button>
+        <button class="btn btn-primary" onclick="openApptModal()">+ Agregar cita</button>
+      </div>
+    </div>
+
+    <div id="week-view" style="display:none;margin-bottom:20px;">
+      <div class="week-grid" id="week-grid"></div>
+    </div>
+
+    <div class="search-row">
+      <input type="search" id="appt-search" placeholder="Buscar cliente o servicio…" oninput="renderAppointments()" autocorrect="off" autocapitalize="off">
+      <select id="appt-filter-staff" onchange="renderAppointments()"><option value="">Todas las empleadas</option></select>
+      <select id="appt-filter-status" onchange="renderAppointments()">
+        <option value="">Todos los estados</option>
+        <option value="agendada">Agendada</option>
+        <option value="completada">Completada</option>
+        <option value="cancelada">Cancelada</option>
+      </select>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <span id="appt-day-label">Todas las citas</span>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Empleada</th><th>Cliente</th><th>Servicio</th><th>Fecha y Hora</th><th>Precio</th><th>Estado</th><th>Notas</th><th></th></tr></thead>
+          <tbody id="appt-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLIENTS -->
+  <div class="page" id="page-clients">
+    <div class="sec-header">
+      <div class="sec-title">Clientes</div>
+      <button class="btn btn-primary" onclick="openClientModal()">+ Nueva cliente</button>
+    </div>
+    <div class="search-row">
+      <input type="search" id="client-search" placeholder="Buscar nombre o teléfono…" oninput="renderClients()" autocorrect="off" autocapitalize="off">
+    </div>
+    <div class="card">
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Cliente</th><th>Teléfono</th><th>Citas</th><th>Total pagado</th><th>Atendida por</th><th>Última visita</th><th></th></tr></thead>
+          <tbody id="client-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICE HISTORY -->
+  <div class="page" id="page-history">
+    <div class="sec-header">
+      <div class="sec-title">Historial de Precios</div>
+      <div class="date-filter">
+        <label>Desde:</label><input type="date" id="hist-from" onchange="renderHistory()">
+        <label>Hasta:</label><input type="date" id="hist-to" onchange="renderHistory()">
+      </div>
+    </div>
+    <div class="search-row">
+      <input type="search" id="hist-search" placeholder="Buscar cliente o servicio…" oninput="renderHistory()" autocorrect="off" autocapitalize="off">
+      <select id="hist-staff" onchange="renderHistory()"><option value="">Todas las empleadas</option></select>
+    </div>
+    <div class="card">
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Empleada</th><th>Cliente</th><th>Servicio</th><th>Fecha</th><th>Precio</th><th>Estado</th><th>Notas</th></tr></thead>
+          <tbody id="hist-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI BOOKING PAGE -->
+  <div class="page" id="page-ai">
+    <div class="ai-header">
+      <div class="ai-header-top">
+        <div class="ai-title">Asistente de Citas con IA</div>
+        <button class="btn btn-ghost btn-sm" onclick="resetAI()">Reiniciar</button>
+      </div>
+      <div class="ai-sub">Registra citas rápidamente con inteligencia artificial</div>
+    </div>
+    <div class="ai-messages" id="ai-messages"></div>
+    <div class="ai-input-row">
+      <textarea class="ai-input" id="ai-input" placeholder="Type your answer…" rows="1" onkeydown="aiKeydown(event)" oninput="aiAutoResize(this)"></textarea>
+      <button class="ai-send" id="ai-send-btn" onclick="aiSend()">↑</button>
+    </div>
+  </div>
+
+</div>
+
+  <!-- IMPORT PAGE -->
+  <div class="page" id="page-import">
+    <div class="sec-header">
+      <div>
+        <div class="sec-title">Agregar Clientes</div>
+        <div style="font-size:13px;color:var(--ink-soft);margin-top:2px;">Agregue clientes existentes con nombre, teléfono y precios opcionales</div>
+      </div>
+    </div>
+
+    <!-- MODE TOGGLE -->
+    <div style="display:flex;gap:10px;margin-bottom:20px;">
+      <button class="btn btn-primary" id="imp-mode-bulk-btn" onclick="setImportMode('bulk')">Pegar lista</button>
+      <button class="btn btn-ghost" id="imp-mode-single-btn" onclick="setImportMode('single')">Agregar uno por uno</button>
+    </div>
+
+    <!-- BULK MODE -->
+    <div id="imp-bulk" >
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-head">Pegar lista de clientes</div>
+        <div class="card-body" style="padding:16px 20px;">
+          <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;">Pegue la información en cualquier formato. Por ejemplo:<br>
+          <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-size:12px;">María López 305-555-0101 keratina $120, manicure $30</code></p>
+          <textarea id="imp-bulk-text" style="width:100%;min-height:180px;font-size:14px;padding:12px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;resize:vertical;" placeholder="Pegue aquí la lista de clientes..."></textarea>
+          <div style="display:flex;gap:10px;margin-top:12px;">
+            <button class="btn btn-primary" onclick="processBulkImport()" id="imp-bulk-btn">Procesar con IA</button>
+            <button class="btn btn-ghost" onclick="document.getElementById('imp-bulk-text').value=''">Limpiar</button>
+          </div>
+        </div>
+      </div>
+      <div id="imp-bulk-preview" style="display:none;">
+        <div class="card">
+          <div class="card-head"><span id="imp-preview-title">Clientes detectados</span><button class="btn btn-primary btn-sm" onclick="confirmBulkImport()" id="imp-confirm-btn">Confirmar e importar</button></div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Nombre</th><th>Teléfono</th><th>Servicios / Precios</th><th></th></tr></thead>
+              <tbody id="imp-preview-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div id="imp-bulk-status" style="text-align:center;padding:16px;font-size:14px;display:none;"></div>
+    </div>
+
+    <!-- SINGLE MODE -->
+    <div id="imp-single" style="display:none;">
+      <div class="card">
+        <div class="card-head">Nueva cliente</div>
+        <div class="card-body" style="padding:16px 20px;">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nombre completo</label>
+              <input type="text" id="imp-name" placeholder="Ej: María López" autocapitalize="words">
+            </div>
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input type="tel" id="imp-phone" placeholder="(305) 000-0000" inputmode="tel">
+            </div>
+            <div class="form-group full">
+              <label>Servicios y precios habituales (opcional)</label>
+              <input type="text" id="imp-services" placeholder="Ej: Keratina $120, Manicure $30">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="saveSingleImport()">Agregar cliente</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMPORTED LOG -->
+    <div style="margin-top:24px;" id="imp-log-wrap">
+      <div class="section-label">Clientes agregadas recientemente</div>
+      <div class="card">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Nombre</th><th>Teléfono</th><th>Notas</th><th>Agregada</th></tr></thead>
+            <tbody id="imp-log-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- MODAL: APPOINTMENT -->
+<div class="modal-overlay" id="modal-appt">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="appt-modal-title">Agregar Cita</div>
+      <button class="modal-close" onclick="closeModal('appt')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Asignada a</label>
+          <select id="f-staff"></select>
+        </div>
+        <div class="form-group">
+          <label>Cliente</label>
+          <select id="f-client"></select>
+        </div>
+        <div class="form-group">
+          <label>Servicio</label>
+          <input type="text" id="f-service" placeholder="Ej: Manicure, Keratina" autocorrect="off">
+        </div>
+        <div class="form-group">
+          <label>Fecha</label>
+          <input type="date" id="f-date">
+        </div>
+        <div class="form-group">
+          <label>Hora</label>
+          <input type="time" id="f-time">
+        </div>
+        <div class="form-group">
+          <label>Precio ($)</label>
+          <input type="number" id="f-price" placeholder="0.00" min="0" step="0.01" inputmode="decimal">
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <select id="f-status">
+            <option value="scheduled">Agendada</option>
+            <option value="completed">Completada</option>
+            <option value="cancelled">Cancelada</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Notas</label>
+          <textarea id="f-notes" placeholder="Cualquier detalle…"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('appt')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveAppt()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: CLIENT -->
+<div class="modal-overlay" id="modal-client">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Nueva Cliente</div>
+      <button class="modal-close" onclick="closeModal('client')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre completo</label>
+          <input type="text" id="c-name" placeholder="Ej: María López" autocorrect="off" autocapitalize="words">
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" id="c-phone" placeholder="(305) 000-0000" inputmode="tel">
+        </div>
+        <div class="form-group full">
+          <label>Notas</label>
+          <textarea id="c-notes" placeholder="Preferences, allergies, regular services…"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('client')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveClient()">Guardar cliente</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: CHANGE PIN -->
+<div class="modal-overlay" id="modal-pin">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Cambiar PIN</div>
+      <button class="modal-close" onclick="closeModal('pin')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Nuevo PIN de 4 dígitos</label>
+        <input type="number" id="new-pin" placeholder="e.g. 1234" min="1000" max="9999" inputmode="numeric">
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('pin')">Cancelar</button>
+      <button class="btn btn-primary" onclick="savePin()">Guardar PIN</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STAFF ───────────────────────────────────────────
+const STAFF = [
+  {id:'s1',name:'Zuly',           role:'Manicurista',            colorIdx:0},
+  {id:'s2',name:'Claudia',        role:'Manicurista',            colorIdx:1},
+  {id:'s3',name:'Carmen',         role:'Manicurista',            colorIdx:2},
+  {id:'s4',name:'Radella',        role:'Facial',                colorIdx:3},
+  {id:'s5',name:'Yisleidy & Pupi',role:'Estilistas (Dueñas)',colorIdx:4,initials:'YP'},
+];
+
+// ─── STATE ───────────────────────────────────────────
+let pin     = localStorage.getItem('bb3_pin') || '1001';
+let clients = JSON.parse(localStorage.getItem('bb3_clients') || '[]');
+let appts   = JSON.parse(localStorage.getItem('bb3_appts')   || '[]');
+let editingApptId = null;
+let pinBuf = [];
+let aiChatId = null;
+
+function persist(){
+  localStorage.setItem('bb3_pin',     pin);
+  localStorage.setItem('bb3_clients', JSON.stringify(clients));
+  localStorage.setItem('bb3_appts',   JSON.stringify(appts));
+}
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
+function today(){ return new Date().toISOString().slice(0,10); }
+function getClient(id){ return clients.find(c=>c.id===id)||{name:'Unknown',phone:''}; }
+function getStaff(id){  return STAFF.find(s=>s.id===id)||{name:'Unknown',colorIdx:0}; }
+function fmtDate(d){    if(!d)return''; const[y,m,dy]=d.split('-'); return`${m}/${dy}/${y}`; }
+function fmtPrice(p){   return(!p&&p!==0)?'—':'$'+parseFloat(p).toFixed(2); }
+
+function badgeHTML(st){
+  const m={scheduled:'badge-scheduled',completed:'badge-completed',cancelled:'badge-cancelled'};
+  return `<span class="badge ${m[st]||''}">${st.charAt(0).toUpperCase()+st.slice(1)}</span>`;
+}
+function avatarHTML(name,idx,size=32,initials=null){
+  const ini=initials||name.split(' ').filter(w=>w!=='&').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  return `<div class="avatar col-${idx}" style="width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px">${ini}</div>`;
+}
+function clientPill(c){
+  const ini=c.name.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  return `<div class="client-pill">
+    <div class="avatar" style="background:var(--brand-light);color:var(--brand-deep);width:32px;height:32px;font-size:12px">${ini}</div>
+    <div><div class="pill-name">${c.name}</div><div class="pill-phone">${c.phone}</div></div>
+  </div>`;
+}
+function staffTag(s){
+  return `<span class="staff-tag">${avatarHTML(s.name,s.colorIdx,22,s.initials||null)} ${s.name}</span>`;
+}
+function emptyState(msg){
+  return `<tr><td colspan="99"><div class="empty-state"><div class="icon">📋</div><p>${msg}</p></div></td></tr>`;
+}
+
+// ─── PIN LOGIN ───────────────────────────────────────
+(function buildKeypad(){
+  // focus hidden input for keyboard access
+  setTimeout(()=>{ const el=document.getElementById('pin-keyboard-input'); if(el) el.focus(); },100);
+  const kp=document.getElementById('pin-keypad');
+  ['1','2','3','4','5','6','7','8','9','','0','⌫'].forEach(k=>{
+    if(k===''){kp.innerHTML+='<div></div>';return;}
+    if(k==='⌫'){
+      kp.innerHTML+=`<button class="pin-key del" onclick="pinDel()">⌫</button>`;
+    } else {
+      kp.innerHTML+=`<button class="pin-key" onclick="pinPress('${k}')">${k}</button>`;
+    }
+  });
+})();
+
+function pinPress(k){
+  if(pinBuf.length>=4)return;
+  pinBuf.push(k); updateDots(); syncHiddenInput();
+  if(pinBuf.length===4) setTimeout(submitPin,150);
+}
+function pinDel(){ pinBuf.pop(); updateDots(); syncHiddenInput(); document.getElementById('pin-error').textContent=''; }
+function syncHiddenInput(){
+  const el=document.getElementById('pin-keyboard-input');
+  if(el) el.value=pinBuf.join('');
+}
+function updateDots(){
+  for(let i=0;i<4;i++){
+    const d=document.getElementById('pd'+i);
+    if(!d)return;
+    d.textContent=pinBuf[i]?'●':'';
+    d.classList.toggle('filled',!!pinBuf[i]);
+    d.classList.toggle('active',i===pinBuf.length);
+  }
+}
+function onPinKeyboardInput(el){
+  // sync keyboard typing into pinBuf
+  const val=el.value.replace(/\D/g,'').slice(0,4);
+  el.value=val;
+  pinBuf=val.split('');
+  updateDots();
+  document.getElementById('pin-error').textContent='';
+  if(pinBuf.length===4) setTimeout(submitPin,150);
+}
+function onPinKeydown(e){
+  if(e.key==='Enter') submitPin();
+}
+function submitPin(){
+  if(pinBuf.join('')===pin){ signIn(); }
+  else{
+    document.getElementById('pin-error').textContent='PIN incorrecto, intente de nuevo.';
+    pinBuf=[]; updateDots();
+  }
+}
+function signIn(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  populateDropdowns();
+  const adf=document.getElementById('appt-date-filter');
+  if(adf&&!adf.value) adf.value=today();
+  renderOverview();
+}
+function signOut(){
+  pinBuf=[]; updateDots();
+  document.getElementById('pin-error').textContent='';
+  document.getElementById('login-screen').style.display='';
+  document.getElementById('app').style.display='none';
+}
+
+// ─── ROUTING ────────────────────────────────────────
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if(name==='overview')     renderOverview();
+  if(name==='appointments'){ const adf=document.getElementById('appt-date-filter'); if(adf&&!adf.value) adf.value=today(); renderAppointments(); updateWeekLabel(); }
+  if(name==='clients')      renderClients();
+  if(name==='history')      renderHistory();
+  if(name==='import'){   setImportMode('bulk'); renderImportLog(); }
+  if(name==='ai'){ if(aiHistory.length===0) initAI(); }
+}
+
+// ─── DROPDOWNS ──────────────────────────────────────
+function populateDropdowns(){
+  const staffOpts=STAFF.map(s=>`<option value="${s.id}">${s.name} — ${s.role}</option>`).join('');
+  document.getElementById('f-staff').innerHTML=staffOpts;
+  const filterOpts='<option value="">Todas las empleadas</option>'+STAFF.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+  ['appt-filter-staff','hist-staff'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.innerHTML=filterOpts;
+  });
+  populateClientSelect();
+  // history date defaults
+  const hf=document.getElementById('hist-from');
+  const ht=document.getElementById('hist-to');
+  if(hf&&!hf.value){ const d=new Date(); d.setDate(1); hf.value=d.toISOString().slice(0,10); }
+  if(ht&&!ht.value) ht.value=today();
+}
+function populateClientSelect(){
+  const el=document.getElementById('f-client'); if(!el)return;
+  el.innerHTML='<option value="">Seleccionar cliente…</option>'+
+    clients.slice().sort((a,b)=>a.name.localeCompare(b.name))
+      .map(c=>`<option value="${c.id}">${c.name} — ${c.phone}</option>`).join('');
+}
+
+
+// ─── WEEK NAVIGATION ─────────────────────────────────────────────────────
+let weekViewOpen = false;
+
+function getWeekStart(dateStr) {
+  const d = dateStr ? new Date(dateStr + 'T12:00:00') : new Date();
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  const mon = new Date(d);
+  mon.setDate(diff);
+  return mon.toISOString().slice(0, 10);
+}
+
+function shiftWeek(dir) {
+  const cur = document.getElementById('appt-date-filter')?.value || today();
+  const d = new Date(cur + 'T12:00:00');
+  d.setDate(d.getDate() + dir * 7);
+  const adf = document.getElementById('appt-date-filter');
+  if(adf) adf.value = d.toISOString().slice(0, 10);
+  renderAppointments();
+}
+
+function goToToday() {
+  const adf = document.getElementById('appt-date-filter');
+  if(adf) adf.value = today();
+  renderAppointments();
+}
+
+function onDatePickerChange() {
+  renderAppointments();
+  if(weekViewOpen) renderWeekGrid();
+}
+
+function toggleWeekView() {
+  weekViewOpen = !weekViewOpen;
+  const wv = document.getElementById('week-view');
+  const btn = document.getElementById('week-view-btn');
+  if(wv) wv.style.display = weekViewOpen ? 'block' : 'none';
+  if(btn) btn.textContent = weekViewOpen ? 'Ver dia' : 'Ver semana';
+  if(weekViewOpen) renderWeekGrid();
+}
+
+function renderWeekGrid() {
+  const selDate = document.getElementById('appt-date-filter')?.value || today();
+  const weekStart = getWeekStart(selDate);
+  const grid = document.getElementById('week-grid');
+  if(!grid) return;
+  const todayStr = today();
+  const dias = ['Lun','Mar','Mie','Jue','Vie','Sab','Dom'];
+  let html = '';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(weekStart + 'T12:00:00');
+    d.setDate(d.getDate() + i);
+    const ds = d.toISOString().slice(0, 10);
+    const dayAppts = appts.filter(a => a.date === ds);
+    const comp = dayAppts.filter(a => a.status==='completed'||a.status==='completada');
+    const rev = comp.reduce((s,a) => s+(a.price||0), 0);
+    const isToday = ds === todayStr;
+    const isSel = ds === selDate;
+    const cls = ['week-day', isToday?'today':'', isSel?'selected':'', dayAppts.length?'has-appts':''].filter(Boolean).join(' ');
+    const dots = dayAppts.slice(0,6).map(()=>'<div class="week-dot"></div>').join('');
+    const countLabel = dayAppts.length ? ('<div class="week-day-count">' + dayAppts.length + ' cita' + (dayAppts.length!==1?'s':'') + (rev?' - $'+rev.toFixed(0):'') + '</div>') : '';
+    html += '<div class="' + cls + '" onclick="selectWeekDay(\'' + ds + '\')">' +
+      '<div class="week-day-name">' + dias[i] + '</div>' +
+      '<div class="week-day-num">' + d.getDate() + '</div>' +
+      '<div class="week-day-dots">' + dots + '</div>' +
+      countLabel +
+      '</div>';
+  }
+  grid.innerHTML = html;
+  updateWeekLabel();
+}
+
+function selectWeekDay(ds) {
+  const adf = document.getElementById('appt-date-filter');
+  if(adf) adf.value = ds;
+  renderAppointments();
+  if(weekViewOpen) renderWeekGrid();
+}
+
+function updateWeekLabel() {
+  const selDate = document.getElementById('appt-date-filter')?.value || today();
+  const wStart = new Date(getWeekStart(selDate) + 'T12:00:00');
+  const wEnd = new Date(getWeekStart(selDate) + 'T12:00:00');
+  wEnd.setDate(wEnd.getDate() + 6);
+  const fmt = function(d) { return d.toLocaleDateString('es-ES', {day:'numeric', month:'short'}); };
+  const el = document.getElementById('week-label');
+  if(el) el.textContent = fmt(wStart) + ' - ' + fmt(wEnd);
+}
+
+// ─── OVERVIEW ───────────────────────────────────────
+function renderOverview(){
+  const d = today();
+  const tl = document.getElementById('ov-today-label');
+  if(tl) tl.textContent = new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+  const day  = appts.filter(a => a.date === d);
+  const comp = day.filter(a => a.status==='completed' || a.status==='completada');
+  const totalRev = comp.reduce((s,a) => s+(a.price||0), 0);
+
+  document.getElementById('ov-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Citas hoy</div><div class="stat-value">${day.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Completadas</div><div class="stat-value">${comp.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Agendadas</div><div class="stat-value">${day.filter(a=>a.status==='scheduled'||a.status==='agendada').length}</div></div>
+    <div class="stat-card"><div class="stat-label">Ingresos del día</div><div class="stat-value">${fmtPrice(totalRev)}</div></div>
+  `;
+
+  document.getElementById('staff-rev-grid').innerHTML = STAFF.map(s => {
+    const sComp = comp.filter(a => a.staffId===s.id);
+    const rev   = sComp.reduce((sum,a) => sum+(a.price||0), 0);
+    const cnt   = day.filter(a => a.staffId===s.id).length;
+    return `<div class="staff-rev-card">
+      ${avatarHTML(s.name,s.colorIdx,38)}
+      <div class="src-info"><div class="name">${s.name}</div><div class="role">${s.role}</div></div>
+      <div class="src-rev"><div class="amt">${fmtPrice(rev)}</div><div class="lbl">${cnt} cita${cnt!==1?'s':''}</div></div>
+    </div>`;
+  }).join('');
+
+  // Today's appointments table
+  const sorted = day.slice().sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+  const body = document.getElementById('ov-appt-body');
+  if(!sorted.length){ body.innerHTML = emptyState('No hay citas para hoy'); return; }
+  body.innerHTML = sorted.map(a => {
+    const cl = getClient(a.clientId); const s = getStaff(a.staffId);
+    return `<tr>
+      <td>${staffTag(s)}</td>
+      <td>${clientPill(cl)}</td>
+      <td>${a.service}</td>
+      <td>${a.time||'—'}</td>
+      <td style="font-weight:600;color:var(--brand-deep)">${fmtPrice(a.price)}</td>
+      <td>${badgeHTML(a.status)}</td>
+      <td><div style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm" onclick="openApptModal('${a.id}')">Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="delAppt('${a.id}')">Eliminar</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── APPOINTMENTS ───────────────────────────────────
+function renderAppointments(){
+  updateWeekLabel();
+  if(weekViewOpen) renderWeekGrid();
+  const q=(document.getElementById('appt-search')?.value||'').toLowerCase();
+  const sf=document.getElementById('appt-filter-staff')?.value||'';
+  const ss=document.getElementById('appt-filter-status')?.value||'';
+  const dateFilter=document.getElementById('appt-date-filter')?.value||'';
+  let list=appts.slice().sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''));
+  if(dateFilter) list=list.filter(a=>a.date===dateFilter);
+  if(q)  list=list.filter(a=>{const c=getClient(a.clientId);return c.name.toLowerCase().includes(q)||a.service.toLowerCase().includes(q);});
+  if(sf) list=list.filter(a=>a.staffId===sf);
+  if(ss) list=list.filter(a=>(a.status==='scheduled'||a.status==='agendada')?ss==='agendada':a.status===ss||a.status===ss);
+  // Update day label
+  const dl=document.getElementById('appt-day-label');
+  if(dl){
+    if(dateFilter){
+      const dayDate=new Date(dateFilter+'T12:00:00');
+      dl.textContent='Citas — '+dayDate.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
+    } else { dl.textContent='Todas las citas'; }
+  }
+  const body=document.getElementById('appt-body');
+  if(!list.length){ body.innerHTML=emptyState('No se encontraron citas'); return; }
+  body.innerHTML=list.map(a=>{
+    const c=getClient(a.clientId); const s=getStaff(a.staffId);
+    return `<tr>
+      <td>${staffTag(s)}</td>
+      <td>${clientPill(c)}</td>
+      <td>${a.service}</td>
+      <td style="white-space:nowrap">${fmtDate(a.date)}${a.time?' '+a.time:''}</td>
+      <td style="font-weight:600;color:var(--brand-deep)">${fmtPrice(a.price)}</td>
+      <td>${badgeHTML(a.status)}</td>
+      <td style="font-size:13px;color:var(--ink-soft);max-width:130px">${a.notes||'—'}</td>
+      <td><div style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm" onclick="openApptModal('${a.id}')">Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="delAppt('${a.id}')">Eliminar</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+  // Phone card view
+  let phoneCards = document.getElementById('appt-phone-cards');
+  if(!phoneCards){ phoneCards=document.createElement('div'); phoneCards.id='appt-phone-cards'; phoneCards.className='appt-cards'; body.closest('.card').appendChild(phoneCards); }
+  phoneCards.innerHTML = list.map(a=>{
+    const c=getClient(a.clientId); const s=getStaff(a.staffId);
+    return `<div class="appt-card">
+      <div class="appt-card-top">${clientPill(c)}${badgeHTML(a.status)}</div>
+      <div class="appt-card-row"><span>Empleada</span><span>${s.name}</span></div>
+      <div class="appt-card-row"><span>Servicio</span><span>${a.service}</span></div>
+      <div class="appt-card-row"><span>Fecha</span><span>${fmtDate(a.date)}${a.time?' '+a.time:''}</span></div>
+      <div class="appt-card-row"><span>Precio</span><span style="font-weight:700;color:var(--brand-deep)">${fmtPrice(a.price)}</span></div>
+      ${a.notes?`<div class="appt-card-row"><span>Nota</span><span>${a.notes}</span></div>`:''}
+      <div class="appt-card-actions">
+        <button class="btn btn-ghost btn-sm" onclick="openApptModal('${a.id}')">Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="delAppt('${a.id}')">Eliminar</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── CLIENTS ────────────────────────────────────────
+function renderClients(){
+  const q=(document.getElementById('client-search')?.value||'').toLowerCase();
+  let list=clients.slice().sort((a,b)=>a.name.localeCompare(b.name));
+  if(q) list=list.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q));
+  const body=document.getElementById('client-body');
+  if(!list.length){ body.innerHTML=emptyState('Aún no hay clientes. Toque "+ Nueva cliente" para agregar la primera.'); return; }
+  body.innerHTML=list.map(c=>{
+    const ca=appts.filter(a=>a.clientId===c.id);
+    const spent=ca.filter(a=>(a.status==='completed'||a.status==='completada')).reduce((s,a)=>s+(a.price||0),0);
+    const last=ca.filter(a=>(a.status==='completed'||a.status==='completada')).sort((a,b)=>b.date.localeCompare(a.date))[0];
+    const staffSeen=[...new Set(ca.map(a=>a.staffId))].map(id=>getStaff(id));
+    return `<tr>
+      <td>${clientPill(c)}</td>
+      <td style="white-space:nowrap">${c.phone}</td>
+      <td>${ca.length}</td>
+      <td style="font-weight:600;color:var(--brand-deep)">${fmtPrice(spent)}</td>
+      <td>${staffSeen.map(s=>staffTag(s)).join(' ')}</td>
+      <td style="white-space:nowrap">${last?fmtDate(last.date):'—'}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="delClient('${c.id}')">Eliminar</button></td>
+    </tr>`;
+  }).join('');
+  // Phone card view
+  let phoneCards = document.getElementById('client-phone-cards');
+  if(!phoneCards){ phoneCards=document.createElement('div'); phoneCards.id='client-phone-cards'; phoneCards.className='client-cards'; body.closest('.card').appendChild(phoneCards); }
+  phoneCards.innerHTML = list.map(c=>{
+    const ca=appts.filter(a=>a.clientId===c.id);
+    const spent=ca.filter(a=>(a.status==='completed'||a.status==='completada')).reduce((s,a)=>s+(a.price||0),0);
+    const last=ca.filter(a=>(a.status==='completed'||a.status==='completada')).sort((a,b)=>b.date.localeCompare(a.date))[0];
+    const ini=c.name.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+    return `<div class="client-card">
+      <div class="client-card-top">
+        <div class="avatar" style="background:var(--brand-light);color:var(--brand-deep);width:44px;height:44px;font-size:16px">${ini}</div>
+        <div class="client-card-info">
+          <div class="client-card-name">${c.name}</div>
+          <div class="client-card-phone">${c.phone}</div>
+        </div>
+      </div>
+      <div class="client-card-stats">
+        <div class="client-card-stat"><div class="v">${ca.length}</div><div class="l">Citas</div></div>
+        <div class="client-card-stat"><div class="v">${fmtPrice(spent)}</div><div class="l">Total</div></div>
+        <div class="client-card-stat"><div class="v">${last?fmtDate(last.date):'—'}</div><div class="l">Última</div></div>
+      </div>
+      <div class="client-card-actions">
+        <button class="btn btn-danger btn-sm" style="width:100%;justify-content:center" onclick="delClient('${c.id}')">Eliminar cliente</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── HISTORY ────────────────────────────────────────
+function renderHistory(){
+  const q=(document.getElementById('hist-search')?.value||'').toLowerCase();
+  const sf=document.getElementById('hist-staff')?.value||'';
+  const from=document.getElementById('hist-from')?.value||'';
+  const to=document.getElementById('hist-to')?.value||'';
+  let list=appts.slice().sort((a,b)=>b.date.localeCompare(a.date));
+  if(q)    list=list.filter(a=>{const c=getClient(a.clientId);return c.name.toLowerCase().includes(q)||a.service.toLowerCase().includes(q);});
+  if(sf)   list=list.filter(a=>a.staffId===sf);
+  if(from) list=list.filter(a=>a.date>=from);
+  if(to)   list=list.filter(a=>a.date<=to);
+  const body=document.getElementById('hist-body');
+  if(!list.length){ body.innerHTML=emptyState('No se encontraron registros para este filtro'); return; }
+  body.innerHTML=list.map(a=>{
+    const c=getClient(a.clientId); const s=getStaff(a.staffId);
+    return `<tr>
+      <td>${staffTag(s)}</td>
+      <td>${clientPill(c)}</td>
+      <td>${a.service}</td>
+      <td style="white-space:nowrap">${fmtDate(a.date)}</td>
+      <td style="font-weight:600;color:var(--brand-deep)">${fmtPrice(a.price)}</td>
+      <td>${badgeHTML(a.status)}</td>
+      <td style="font-size:13px;color:var(--ink-soft)">${a.notes||'—'}</td>
+    </tr>`;
+  }).join('');
+  // Phone card view
+  let phoneCards = document.getElementById('hist-phone-cards');
+  if(!phoneCards){ phoneCards=document.createElement('div'); phoneCards.id='hist-phone-cards'; phoneCards.className='hist-cards'; body.closest('.card').appendChild(phoneCards); }
+  phoneCards.innerHTML = list.map(a=>{
+    const c=getClient(a.clientId); const s=getStaff(a.staffId);
+    return `<div class="hist-card">
+      <div class="hist-card-top">
+        <div>
+          <div class="hist-card-name">${c.name}</div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">${s.name} · ${fmtDate(a.date)}</div>
+        </div>
+        ${badgeHTML(a.status)}
+      </div>
+      <div class="hist-card-row"><span>Servicio</span><span>${a.service}</span></div>
+      <div class="hist-card-row"><span>Precio</span><span style="font-weight:700;color:var(--brand-deep)">${fmtPrice(a.price)}</span></div>
+      ${a.notes?`<div class="hist-card-row"><span>Nota</span><span>${a.notes}</span></div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ─── MODALS ─────────────────────────────────────────
+function openModal(id){ document.getElementById('modal-'+id).classList.add('open'); }
+function closeModal(id){ document.getElementById('modal-'+id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(el=>
+  el.addEventListener('click', e=>{ if(e.target===el) el.classList.remove('open'); })
+);
+
+function openApptModal(id=null){
+  editingApptId=id;
+  document.getElementById('appt-modal-title').textContent=id?'Edit Appointment':'Agregar Cita';
+  populateClientSelect();
+  if(id){
+    const a=appts.find(x=>x.id===id);
+    document.getElementById('f-staff').value=a.staffId;
+    document.getElementById('f-client').value=a.clientId;
+    document.getElementById('f-service').value=a.service;
+    document.getElementById('f-date').value=a.date;
+    document.getElementById('f-time').value=a.time||'';
+    document.getElementById('f-price').value=a.price||'';
+    document.getElementById('f-status').value=a.status;
+    document.getElementById('f-notes').value=a.notes||'';
+  } else {
+    document.getElementById('f-staff').value='s1';
+    document.getElementById('f-client').value='';
+    document.getElementById('f-service').value='';
+    document.getElementById('f-date').value=document.getElementById('ov-date')?.value||today();
+    document.getElementById('f-time').value='';
+    document.getElementById('f-price').value='';
+    document.getElementById('f-status').value='scheduled';
+    document.getElementById('f-notes').value='';
+  }
+  openModal('appt');
+}
+
+function saveAppt(){
+  const staffId =document.getElementById('f-staff').value;
+  const clientId=document.getElementById('f-client').value;
+  const service =document.getElementById('f-service').value.trim();
+  const date    =document.getElementById('f-date').value;
+  const time    =document.getElementById('f-time').value;
+  const price   =parseFloat(document.getElementById('f-price').value)||0;
+  const status  =document.getElementById('f-status').value;
+  const notes   =document.getElementById('f-notes').value.trim();
+  if(!clientId){ showToast('Seleccione una cliente'); return; }
+  if(!service) { showToast('Ingrese un servicio'); return; }
+  if(!date)    { showToast('Ingrese una fecha'); return; }
+  if(editingApptId){
+    const idx=appts.findIndex(a=>a.id===editingApptId);
+    appts[idx]={...appts[idx],staffId,clientId,service,date,time,price,status,notes};
+  } else {
+    appts.push({id:uid(),staffId,clientId,service,date,time,price,status,notes,createdAt:Date.now()});
+  }
+  persist(); closeModal('appt');
+  showToast(editingApptId?'Cita actualizada':'Cita guardada');
+  renderOverview(); renderAppointments(); renderHistory(); renderClients();
+}
+
+function delAppt(id){
+  if(!confirm('¿Eliminar esta cita?'))return;
+  appts=appts.filter(a=>a.id!==id); persist();
+  showToast('Eliminada');
+  renderOverview(); renderAppointments(); renderHistory();
+}
+
+function openClientModal(){
+  document.getElementById('c-name').value='';
+  document.getElementById('c-phone').value='';
+  document.getElementById('c-notes').value='';
+  openModal('client');
+}
+function saveClient(){
+  const name =document.getElementById('c-name').value.trim();
+  const phone=document.getElementById('c-phone').value.trim();
+  const notes=document.getElementById('c-notes').value.trim();
+  if(!name) { showToast('Ingrese un nombre'); return; }
+  if(!phone){ showToast('Ingrese un número de teléfono'); return; }
+  clients.push({id:uid(),name,phone,notes,createdAt:Date.now()});
+  persist(); closeModal('client'); showToast('Cliente agregada');
+  populateClientSelect(); renderClients();
+}
+function delClient(id){
+  if(!confirm('¿Eliminar esta cliente y todas sus citas?'))return;
+  clients=clients.filter(c=>c.id!==id);
+  appts=appts.filter(a=>a.clientId!==id);
+  persist(); showToast('Cliente eliminada'); renderClients(); renderOverview();
+}
+
+// PIN change
+function openPinModal(){ document.getElementById('new-pin').value=''; openModal('pin'); }
+function savePin(){
+  const v=document.getElementById('new-pin').value.trim();
+  if(!/^\d{4}$/.test(v)){ showToast('El PIN debe tener 4 dígitos'); return; }
+  pin=v; persist(); closeModal('pin'); showToast('PIN actualizado');
+}
+
+
+// ─── AI BOOKING ──────────────────────────────────────
+let aiHistory = [];
+let aiBooking = {};
+let aiThinking = false;
+
+const AI_SYSTEM = () => {
+  const staffList = STAFF.map(s => `${s.id}: ${s.name} (${s.role})`).join(', ');
+  const clientList = clients.length
+    ? clients.map(c => `${c.id}: ${c.name} (${c.phone})`).join(', ')
+    : 'No clients in the system yet';
+  const todayStr = today();
+  return `You are a friendly booking assistant for Berenice Beauty Salon. Your job is to collect all the details needed to log an appointment, one question at a time. Be warm, brief, and conversational — like a helpful coworker.
+
+Current date: ${todayStr}
+Staff members: ${staffList}
+Existing clients: ${clientList}
+
+You must collect these 7 fields in order:
+1. client — Ask for the client's name. If it matches an existing client (fuzzy match is fine), use their id. If new, ask for their phone number too and note them as new.
+2. staffId — Ask which staff member this appointment is for. Show the names as options.
+3. service — Ask what service they're getting (Ej: Manicure, Keratina, Highlights, Facial, Acrílicas, etc.)
+4. date — Ask for the date. Accept natural language like "today", "tomorrow", "Monday". Convert to YYYY-MM-DD.
+5. time — Ask for the time. Accept natural formats like "2pm", "10:30". Convert to HH:MM (24h).
+6. price — Ask how much this appointment costs in dollars.
+7. status — Ask if this is scheduled or completed. Default to "scheduled".
+
+After collecting all 7, output a JSON summary in this exact format (and nothing else after it):
+BOOKING_READY:{"clientId":"...or NEW","clientName":"...","clientPhone":"...or empty if existing","staffId":"...","service":"...","date":"YYYY-MM-DD","time":"HH:MM","price":0,"status":"scheduled"}
+
+Rules:
+- Ask ONE question at a time. Keep each message short.
+- When asking for staff, list them as tappable options in your message using this format: OPTIONS:[{"label":"Zuly","value":"s1"},...]
+- When asking for status, use: OPTIONS:[{"label":"Scheduled","value":"scheduled"},{"label":"Completed","value":"completed"}]
+- Never ask for all fields at once.
+- If the user seems confused or gives an unexpected answer, gently clarify.
+- Once you output BOOKING_READY: do not say anything else.`;
+};
+
+function initAI() {
+  aiHistory = [];
+  aiBooking = {};
+  aiChatId = null;
+  const msgs = document.getElementById('ai-messages');
+  msgs.innerHTML = '';
+  // Send today's date silently to Flowise so it knows the current date, then show its response
+  const todayISO = new Date().toLocaleDateString('es-ES', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  const trigger = 'Hoy es ' + todayISO + '. Quiero registrar una cita.';
+  aiHistory.push({ role: 'user', content: trigger });
+  aiCallAPI();
+}
+
+function resetAI() {
+  aiChatId = null;
+  initAI();
+}
+
+function aiAddBubble(type, text, options = null) {
+  const msgs = document.getElementById('ai-messages');
+  const div = document.createElement('div');
+  div.className = 'ai-bubble ' + type;
+  if (type === 'ai') {
+    div.innerHTML = '<div class="bubble-label">Assistant</div>' + escapeHtml(text);
+  } else {
+    div.textContent = text;
+  }
+  if (options && options.length) {
+    const row = document.createElement('div');
+    row.className = 'ai-options';
+    options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'ai-opt';
+      btn.textContent = opt.label;
+      btn.onclick = () => {
+        // disable all options in this bubble
+        div.querySelectorAll('.ai-opt').forEach(b => { b.disabled = true; b.style.opacity = '.5'; });
+        aiUserReply(opt.label, opt.value);
+      };
+      row.appendChild(btn);
+    });
+    div.appendChild(row);
+  }
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+function aiAddConfirmCard(booking) {
+  const msgs = document.getElementById('ai-messages');
+  // Use names directly from booking since AI returns names not IDs
+  const clientName = booking.clientName || getClient(booking.clientId).name;
+  const staffName = booking.staffName || getStaff(booking.staffId).name;
+  const card = document.createElement('div');
+  card.className = 'ai-bubble ai';
+  card.innerHTML = `<div class="bubble-label">Resumen</div>
+    <div class="ai-confirm-card">
+      <div class="row"><span class="lbl">Cliente</span><span class="val">${escapeHtml(clientName)}</span></div>
+      <div class="row"><span class="lbl">Empleada</span><span class="val">${escapeHtml(staffName)}</span></div>
+      <div class="row"><span class="lbl">Servicio</span><span class="val">${escapeHtml(booking.service)}</span></div>
+      <div class="row"><span class="lbl">Fecha</span><span class="val">${fmtDate(booking.date)}</span></div>
+      <div class="row"><span class="lbl">Hora</span><span class="val">${booking.time||'—'}</span></div>
+      <div class="row"><span class="lbl">Precio</span><span class="val">${fmtPrice(booking.price)}</span></div>
+      <div class="row"><span class="lbl">Estado</span><span class="val">${booking.status.charAt(0).toUpperCase()+booking.status.slice(1)}</span></div>
+    </div>`;
+  const optRow = document.createElement('div');
+  optRow.className = 'ai-options';
+  ['Confirmar y guardar', 'Empezar de nuevo'].forEach(label => {
+    const btn = document.createElement('button');
+    btn.className = 'ai-opt';
+    btn.textContent = label;
+    btn.onclick = () => {
+      optRow.querySelectorAll('.ai-opt').forEach(b => { b.disabled = true; b.style.opacity = '.5'; });
+      if (label === 'Confirmar y guardar') aiSaveBooking(booking);
+      else resetAI();
+    };
+    optRow.appendChild(btn);
+  });
+  card.appendChild(optRow);
+  msgs.appendChild(card);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showThinking() {
+  const msgs = document.getElementById('ai-messages');
+  const div = document.createElement('div');
+  div.className = 'ai-bubble ai';
+  div.id = 'ai-thinking-bubble';
+  div.innerHTML = '<div class="ai-thinking"><span></span><span></span><span></span></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function hideThinking() {
+  const el = document.getElementById('ai-thinking-bubble');
+  if (el) el.remove();
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+async function aiUserReply(displayText, value = null) {
+  if (aiThinking) return;
+  const actualValue = value || displayText;
+  aiAddBubble('user', displayText);
+  aiHistory.push({ role: 'user', content: actualValue });
+  await aiCallAPI();
+}
+
+async function aiSend() {
+  const input = document.getElementById('ai-input');
+  const text = input.value.trim();
+  if (!text || aiThinking) return;
+  input.value = '';
+  aiAutoResize(input);
+  await aiUserReply(text);
+}
+
+function aiKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    aiSend();
+  }
+}
+
+function aiAutoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+async function aiCallAPI() {
+  aiThinking = true;
+  const sendBtn = document.getElementById('ai-send-btn');
+  sendBtn.disabled = true;
+  showThinking();
+
+  const lastMsg = aiHistory[aiHistory.length - 1];
+
+  try {
+    const body = { question: lastMsg.content };
+    if (aiChatId) body.overrideConfig = { sessionId: aiChatId };
+
+    const resp = await fetch('https://berenicemanager.duckdns.org/api/v1/prediction/83457d09-e71e-457c-8c5c-9e47c0958876', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await resp.json();
+    hideThinking();
+
+    if (data.error) {
+      aiAddBubble('error', 'Something went wrong: ' + data.error.message);
+      aiThinking = false;
+      sendBtn.disabled = false;
+      return;
+    }
+
+    if (data.chatId) aiChatId = data.chatId;
+
+    const raw = (data.text || '').trim();
+    aiHistory.push({ role: 'assistant', content: raw });
+
+    // Check if booking is ready
+    const bookingMatch = raw.match(/BOOKING_READY:(\{.*\})/s);
+    if (bookingMatch) {
+      try {
+        const booking = JSON.parse(bookingMatch[1]);
+        aiBooking = booking;
+        aiAddBubble('ai', "Aquí está el resumen de la cita. ¿Todo está correcto?");
+        aiAddConfirmCard(booking);
+      } catch(e) {
+        aiAddBubble('error', 'Had trouble reading the booking details. Please try again.');
+      }
+      aiThinking = false;
+      sendBtn.disabled = false;
+      return;
+    }
+
+    // Parse OPTIONS from response
+    const optMatch = raw.match(/OPTIONS:(\[.*?\])/s);
+    let options = null;
+    let displayText = raw;
+    if (optMatch) {
+      try { options = JSON.parse(optMatch[1]); } catch(e) {}
+      displayText = raw.replace(/OPTIONS:\[.*?\]/s, '').trim();
+    }
+
+    aiAddBubble('ai', displayText, options);
+  } catch(err) {
+    hideThinking();
+    aiAddBubble('error', 'Error de conexión. Verifica tu internet e intenta de nuevo.');
+  }
+
+  aiThinking = false;
+  sendBtn.disabled = false;
+}
+
+function aiSaveBooking(booking) {
+  // Resolve staffId from staffName (AI returns name, not id)
+  let staffId = booking.staffId;
+  if (!STAFF.find(s => s.id === staffId)) {
+    const nameMatch = STAFF.find(s =>
+      s.name.toLowerCase().includes((booking.staffName||booking.staffId||'').toLowerCase()) ||
+      (booking.staffName||'').toLowerCase().includes(s.name.toLowerCase().split(' ')[0])
+    );
+    staffId = nameMatch ? nameMatch.id : 's5'; // default to owners if no match
+  }
+
+  // Resolve clientId — always create/find by name+phone
+  let clientId = booking.clientId;
+  const existingClient = clients.find(c =>
+    c.name.toLowerCase() === (booking.clientName||'').toLowerCase()
+  );
+  if (existingClient) {
+    clientId = existingClient.id;
+  } else if (!clientId || clientId === 'NEW' || !clients.find(c => c.id === clientId)) {
+    const newClient = {
+      id: uid(),
+      name: booking.clientName,
+      phone: booking.clientPhone || '',
+      notes: '',
+      createdAt: Date.now()
+    };
+    clients.push(newClient);
+    clientId = newClient.id;
+    populateClientSelect();
+  }
+
+  // Check for duplicate: same client + staff + service + date
+  const duplicate = appts.find(a =>
+    a.clientId === clientId &&
+    a.staffId === staffId &&
+    a.service.toLowerCase() === (booking.service||'').toLowerCase() &&
+    a.date === booking.date
+  );
+
+  if (duplicate) {
+    // Update existing appointment instead of creating a new one
+    const idx = appts.findIndex(a => a.id === duplicate.id);
+    appts[idx] = {
+      ...appts[idx],
+      time: booking.time || appts[idx].time,
+      price: parseFloat(booking.price) || appts[idx].price,
+      status: booking.status || appts[idx].status,
+    };
+    persist();
+    renderOverview(); renderAppointments(); renderHistory(); renderClients();
+    aiAddBubble('system', '✓ ¡Cita actualizada exitosamente!');
+  } else {
+    appts.push({
+      id: uid(),
+      staffId,
+      clientId,
+      service: booking.service,
+      date: booking.date,
+      time: booking.time || '',
+      price: parseFloat(booking.price) || 0,
+      status: booking.status || 'scheduled',
+      notes: '',
+      createdAt: Date.now()
+    });
+    persist();
+    renderOverview(); renderAppointments(); renderHistory(); renderClients();
+    aiAddBubble('system', '✓ ¡Cita guardada exitosamente!');
+  }
+  setTimeout(() => {
+    aiAddBubble('ai', "¡Listo! ¿Quieres registrar otra cita?");
+    const msgs = document.getElementById('ai-messages');
+    const div = document.createElement('div');
+    div.className = 'ai-bubble ai';
+    div.innerHTML = '<div class="ai-options">' +
+      '<button class="ai-opt" onclick="resetAI()">Log another</button>' +
+      '<button class="ai-opt" onclick="showPage(\'overview\')">Go to Overview</button>' +
+      '</div>';
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 600);
+}
+
+
+// ─── CLIENT IMPORT ───────────────────────────────────────────────────────
+let importMode = 'bulk';
+let importPreviewData = [];
+
+function setImportMode(mode) {
+  importMode = mode;
+  document.getElementById('imp-bulk').style.display = mode === 'bulk' ? 'block' : 'none';
+  document.getElementById('imp-single').style.display = mode === 'single' ? 'block' : 'none';
+  document.getElementById('imp-mode-bulk-btn').className = mode === 'bulk' ? 'btn btn-primary' : 'btn btn-ghost';
+  document.getElementById('imp-mode-single-btn').className = mode === 'single' ? 'btn btn-primary' : 'btn btn-ghost';
+}
+
+function renderImportLog() {
+  const body = document.getElementById('imp-log-body');
+  if(!body) return;
+  const recent = clients.slice().sort((a,b) => b.createdAt - a.createdAt).slice(0, 20);
+  if(!recent.length) { body.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--ink-soft);font-size:13px">No hay clientes importadas aún</td></tr>'; return; }
+  body.innerHTML = recent.map(cl => {
+    const d = new Date(cl.createdAt);
+    const fmtd = d.toLocaleDateString('es-ES', {day:'numeric', month:'short', year:'numeric'});
+    return `<tr>
+      <td style="font-weight:600">${cl.name}</td>
+      <td>${cl.phone}</td>
+      <td style="font-size:13px;color:var(--ink-soft)">${cl.notes||'—'}</td>
+      <td style="font-size:12px;color:var(--ink-soft);white-space:nowrap">${fmtd}</td>
+    </tr>`;
+  }).join('');
+}
+
+async function processBulkImport() {
+  const text = document.getElementById('imp-bulk-text').value.trim();
+  if(!text) { showToast('Pegue el texto primero'); return; }
+  const btn = document.getElementById('imp-bulk-btn');
+  btn.textContent = 'Procesando...'; btn.disabled = true;
+  document.getElementById('imp-bulk-status').style.display = 'none';
+
+  try {
+    const resp = await fetch('https://berenicemanager.duckdns.org/api/v1/prediction/83457d09-e71e-457c-8c5c-9e47c0958876', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question:
+        `Eres un extractor de datos. Analiza este texto y extrae información de clientes. Para CADA cliente que encuentres, devuelve un objeto JSON. El resultado DEBE ser únicamente un array JSON válido, sin texto adicional, sin explicaciones, sin markdown.
+
+Formato requerido:
+[{"name":"Nombre completo","phone":"teléfono o vacío","notes":"servicios y precios si los hay, o vacío"}]
+
+Si el teléfono no está presente deja el campo vacío. Combina servicios y precios en el campo notes como texto simple.
+
+Texto a analizar:
+${text}`
+      })
+    });
+    const data = await resp.json();
+    const raw = (data.text || '').trim();
+
+    // Parse JSON from response
+    const jsonMatch = raw.match(/\[[\s\S]*\]/);
+    if(!jsonMatch) throw new Error('No se pudo leer la respuesta');
+    const parsed = JSON.parse(jsonMatch[0]);
+
+    importPreviewData = parsed.filter(p => p.name && p.name.trim());
+    renderImportPreview();
+  } catch(e) {
+    showToast('Error al procesar. Intente de nuevo.');
+    console.error(e);
+  }
+
+  btn.textContent = 'Procesar con IA'; btn.disabled = false;
+}
+
+function renderImportPreview() {
+  const preview = document.getElementById('imp-bulk-preview');
+  const body = document.getElementById('imp-preview-body');
+  const title = document.getElementById('imp-preview-title');
+
+  if(!importPreviewData.length) { showToast('No se encontraron clientes'); return; }
+
+  title.textContent = `${importPreviewData.length} cliente${importPreviewData.length!==1?'s':''} detectada${importPreviewData.length!==1?'s':''}`;
+
+  body.innerHTML = importPreviewData.map((cl, i) => {
+    const exists = clients.find(c => c.name.toLowerCase() === cl.name.toLowerCase());
+    return `<tr style="${exists?'opacity:.5':''}">
+      <td>
+        <input type="text" value="${escapeAttr(cl.name)}" onchange="importPreviewData[${i}].name=this.value"
+          style="border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:14px;width:100%;background:var(--bg);">
+        ${exists ? '<div style="font-size:11px;color:var(--ink-soft);margin-top:2px">Ya existe</div>' : ''}
+      </td>
+      <td>
+        <input type="tel" value="${escapeAttr(cl.phone||'')}" onchange="importPreviewData[${i}].phone=this.value"
+          style="border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:14px;width:100%;background:var(--bg);">
+      </td>
+      <td>
+        <input type="text" value="${escapeAttr(cl.notes||'')}" onchange="importPreviewData[${i}].notes=this.value"
+          style="border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:14px;width:100%;background:var(--bg);">
+      </td>
+      <td>
+        <button class="btn btn-danger btn-sm" onclick="importPreviewData.splice(${i},1);renderImportPreview()">✕</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  preview.style.display = 'block';
+}
+
+function escapeAttr(s) {
+  return String(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function confirmBulkImport() {
+  let added = 0;
+  importPreviewData.forEach(cl => {
+    if(!cl.name || cl.name.trim() === '') return;
+    const exists = clients.find(c => c.name.toLowerCase() === cl.name.toLowerCase());
+    if(exists) return;
+    clients.push({ id: uid(), name: cl.name.trim(), phone: cl.phone||'', notes: cl.notes||'', createdAt: Date.now() });
+    added++;
+  });
+  persist();
+  showToast(`${added} cliente${added!==1?'s':''} agregada${added!==1?'s':''} exitosamente`);
+  document.getElementById('imp-bulk-preview').style.display = 'none';
+  document.getElementById('imp-bulk-text').value = '';
+  importPreviewData = [];
+  renderImportLog();
+  renderClients();
+}
+
+function saveSingleImport() {
+  const name  = document.getElementById('imp-name').value.trim();
+  const phone = document.getElementById('imp-phone').value.trim();
+  const notes = document.getElementById('imp-services').value.trim();
+  if(!name)  { showToast('El nombre es obligatorio'); return; }
+  if(!phone) { showToast('El teléfono es obligatorio'); return; }
+  const exists = clients.find(c => c.name.toLowerCase() === name.toLowerCase());
+  if(exists) { showToast('Esta cliente ya existe'); return; }
+  clients.push({ id: uid(), name, phone, notes, createdAt: Date.now() });
+  persist();
+  document.getElementById('imp-name').value = '';
+  document.getElementById('imp-phone').value = '';
+  document.getElementById('imp-services').value = '';
+  showToast('Cliente agregada');
+  renderImportLog();
+  renderClients();
+}
+
+// ─── TOAST ──────────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+// ─── INIT ───────────────────────────────────────────
+document.getElementById('topbar-date').textContent=
+  new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+</script>
+</body>
+</html>
