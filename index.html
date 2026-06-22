@@ -1078,15 +1078,17 @@ async function handleContactSend() {
   try {
     const reply = await getContactReply(text);
     typingEl.remove();
-    // Detect CONFIRM block from Flowise
-    const confirmMatch = reply.match(/CONFIRM:(\{.*?\})/s);
+    console.log("Flowise reply:", reply);
+    // Detect CONFIRM block — match across newlines and whitespace
+    const confirmMatch = reply.match(/CONFIRM:\s*(\{[\s\S]*?\})/);
     if (confirmMatch) {
       try {
         const data = JSON.parse(confirmMatch[1]);
-        const cleanReply = reply.replace(/CONFIRM:\{.*?\}/s, "").trim();
+        const cleanReply = reply.replace(/CONFIRM:\s*\{[\s\S]*?\}/, "").trim();
         if (cleanReply) addMessage(contactChatBodyEl, "bot", cleanReply);
         renderConfirmCard(data);
       } catch(e) {
+        console.log("CONFIRM parse error:", e, confirmMatch[1]);
         addMessage(contactChatBodyEl, "bot", reply);
       }
     } else {
