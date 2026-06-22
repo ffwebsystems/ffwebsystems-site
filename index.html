@@ -1095,20 +1095,20 @@ async function handleContactSend() {
     }
 
     // Fallback: detect confirmation intent in plain text and extract fields
-    const looksLikeConfirm = /does that look right|confirm.*details|here.*what i have|let me confirm/i.test(reply);
+    const looksLikeConfirm = /does that look right|confirm.*details|here.*what i have|let me confirm|here.*what.*collected|got it.*here|i have.*collected/i.test(reply);
     if (looksLikeConfirm) {
-      // Try to extract fields from the conversation history
-      const histText = contactHistory.map(h => h.content).join(" ");
-      const nameMatch    = histText.match(/(?:my name is|name[:\s]+)([A-Z][a-z]+)/i);
-      const contactMatch = histText.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|[\d\s\-\(\)]{7,15})/);
-      const bizMatch     = histText.match(/(?:i (?:own|run|have) (?:a |an )?)([\w\s]+?)(?:\.|,|and| in | my)/i);
-      const summaryMatch = contactHistory.filter(h => h.role === "userMessage").slice(-3).map(h => h.content).join(", ");
+      // Search both conversation history AND the current reply
+      const searchText = contactHistory.map(h => h.content).join(" ") + " " + reply;
+      const nameMatch    = searchText.match(/(?:your name[:\s]+|name[:\s]+)([A-Z][a-zA-Z]+)/i);
+      const contactMatch = searchText.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|(?:\+?1?\s?)?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{4})/);
+      const bizMatch     = searchText.match(/(?:business type[:\s]+)([\w\s]+?)(?:,|\.|What)/i);
+      const needMatch    = searchText.match(/(?:what you need[:\s]+)([\w\s]+?)(?:,|\.|Your)/i);
 
       const extracted = {
         name:          nameMatch    ? nameMatch[1].trim()    : null,
         contact:       contactMatch ? contactMatch[0].trim() : null,
         business_type: bizMatch     ? bizMatch[1].trim()     : null,
-        summary:       summaryMatch || null
+        summary:       needMatch    ? needMatch[1].trim()    : null
       };
 
       // Only render card if we got at least name + contact
