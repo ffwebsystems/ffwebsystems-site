@@ -423,9 +423,15 @@
   .about-card-body{font-size:13.5px;color:rgba(255,255,255,0.5);line-height:1.6;}
   .about-stat{
     display:flex;align-items:baseline;gap:8px;margin-bottom:8px;
+    flex-wrap:wrap;
   }
   .about-stat-num{font-size:28px;font-weight:800;color:var(--accent);letter-spacing:-0.03em;}
   .about-stat-label{font-size:13px;color:rgba(255,255,255,0.45);}
+  @media(max-width:600px){
+    .about-stat{flex-direction:column;gap:2px;align-items:flex-start;}
+    .about-stat-num{font-size:32px;}
+    .about-stat-label{font-size:12px;}
+  }
   @media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:40px;}}
 
   /* CTA BAND */
@@ -486,14 +492,14 @@
     <div class="hero-inner">
       <div>
         <div class="eyebrow" data-i18n="hero.eyebrow">Websites for local businesses</div>
-        <h1 data-i18n-html="hero.h1">A website that <em>answers back</em>, not one that just sits there.</h1>
-        <p class="lede" data-i18n="hero.lede">We build your site and put a trained AI assistant right on it, so visitors get answered at 11pm on a Sunday, not just a contact form they'll forget to fill out.</p>
+        <h1 data-i18n-html="hero.h1">A website that <em>works while you sleep</em>.</h1>
+        <p class="lede" data-i18n="hero.lede">We build your site and put a trained AI assistant on it, so visitors get real answers at 11pm on a Sunday instead of a contact form nobody fills out.</p>
         <div class="hero-ctas">
           <a href="#demo" class="btn-primary" data-i18n="hero.ctaPrimary">Try the AI on this page</a>
           <a href="#contact" class="btn-secondary" data-i18n="hero.ctaSecondary">Get in touch</a>
         </div>
         <div class="proof-row">
-          <p class="proof-item" data-i18n="hero.proof">Small operation, big results. No layers, no long timelines. Just a site that works and an assistant that answers.</p>
+          <p class="proof-item" data-i18n="hero.proof">Small team, fast turnaround. No bloated timelines, no middlemen. Just results.</p>
         </div>
       </div>
 
@@ -846,10 +852,10 @@ const I18N = {
   "nav.pricing":          { en: "Pricing",          es: "Precios" },
   "nav.cta":              { en: "Try the demo",     es: "Probar la demo" },
   "hero.eyebrow":         { en: "Websites for local businesses", es: "Sitios web para negocios locales" },
-  "hero.lede":            { en: "We build your site and put a trained AI assistant right on it, so visitors get answered at 11pm on a Sunday, not just a contact form they'll forget to fill out.", es: "Construimos tu sitio web y le ponemos un asistente de IA entrenado, para que los visitantes reciban respuesta a las 11pm un domingo, no solo un formulario de contacto que olvidarán llenar." },
+  "hero.lede":            { en: "We build your site and put a trained AI assistant on it, so visitors get real answers at 11pm on a Sunday instead of a contact form nobody fills out.", es: "Construimos tu sitio web y le ponemos un asistente de IA entrenado, para que los visitantes reciban respuesta a las 11pm un domingo, en lugar de un formulario de contacto que nadie llena." },
   "hero.ctaPrimary":      { en: "Try the AI on this page", es: "Prueba la IA en esta página" },
   "hero.ctaSecondary":    { en: "Get in touch",    es: "Contáctanos" },
-  "hero.proof":           { en: "Small operation, big results. No layers, no long timelines. Just a site that works and an assistant that answers.", es: "Operación pequeña, resultados grandes. Sin capas, sin tiempos largos. Solo un sitio que funciona y un asistente que responde." },
+  "hero.proof":           { en: "Small team, fast turnaround. No bloated timelines, no middlemen. Just results.", es: "Equipo pequeño, resultados rápidos. Sin procesos inflados, sin intermediarios. Solo resultados." },
   "demo.title":           { en: "Live demo",        es: "Demo en vivo" },
   "demo.sub":             { en: "No signup needed", es: "No necesitas registrarte" },
   "demo.bizLabel":        { en: "Pick a business:", es: "Elige un negocio:" },
@@ -879,8 +885,8 @@ const I18N = {
 
 const I18N_HTML = {
   "hero.h1": {
-    en: "A website that <em>answers back</em>, not one that just sits there.",
-    es: "Un sitio web que <em>responde</em>, no uno que solo está ahí."
+    en: "A website that <em>works while you sleep</em>.",
+    es: "Un sitio web que <em>trabaja mientras duermes</em>."
   }
 };
 
