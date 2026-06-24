@@ -218,7 +218,7 @@
   /* Chat body */
   .chat-body{
     background:#fff;
-    min-height:220px;max-height:280px;overflow-y:auto;
+    min-height:180px;max-height:260px;overflow-y:auto;
     padding:16px 14px 10px;
     display:flex;flex-direction:column;gap:8px;
   }
@@ -297,32 +297,33 @@
   /* Privacy consent bar */
   .chat-consent{
     display:flex;align-items:center;justify-content:space-between;
-    padding:8px 14px;
-    background:#F7F8FA;
-    border-top:1px solid #ECEEF1;
-    font-size:11.5px;color:#9299A6;
+    padding:6px 14px 8px;
+    background:#fff;
+    font-size:11px;color:#B0B6C3;
     gap:8px;
   }
   .chat-consent a{color:var(--accent);text-decoration:underline;font-weight:500;}
   .chat-consent a:hover{color:var(--accent-dark);}
   .chat-consent-close{
     background:none;border:none;cursor:pointer;
-    color:#C0C4CC;font-size:16px;line-height:1;padding:0;flex-shrink:0;
+    color:#C0C4CC;font-size:14px;line-height:1;padding:0;flex-shrink:0;
     transition:color .15s;
   }
   .chat-consent-close:hover{color:#525866;}
-    display:flex;align-items:center;gap:8px;flex-wrap:nowrap;
-    padding:10px 12px 12px;background:#fff;border-top:1px solid #ECEEF1;
+  .chat-input-row{
+    display:flex;flex-direction:row;align-items:center;gap:8px;
+    padding:10px 12px;background:#fff;border-top:1px solid #ECEEF1;
+    width:100%;box-sizing:border-box;
   }
   .chat-input-row input{
-    flex:1;background:#F0F2F5;border:none;border-radius:22px;
+    flex:1;min-width:0;background:#F0F2F5;border:none;border-radius:22px;
     padding:10px 16px;font-size:13.5px;font-family:var(--sans);
     color:#1A1D25;outline:none;
   }
   .chat-input-row input::placeholder{color:#9299A6;}
   .chat-input-row input:focus{background:#E8EAF0;}
   .chat-send{
-    width:34px;height:34px;border-radius:50%;background:var(--accent);border:none;
+    width:34px;height:34px;min-width:34px;border-radius:50%;background:var(--accent);border:none;
     color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
     flex-shrink:0;transition:opacity .15s;
   }
@@ -540,16 +541,18 @@
           <div class="biz-options" id="bizOptions"></div>
         </div>
         <div class="chat-body" id="chatBody"></div>
-        <div class="chat-consent" id="demoConsent">
-          <span>By chatting, you agree to our <a href="privacy-policy.html" target="_blank">privacy policy</a>.</span>
-          <button class="chat-consent-close" onclick="document.getElementById('demoConsent').style.display='none'" aria-label="Dismiss">×</button>
+        <div style="background:#fff;border-top:1px solid #ECEEF1;">
+          <div class="chat-consent" id="demoConsent">
+            <span>By chatting, you agree to our <a href="privacy-policy.html" target="_blank">privacy policy</a>.</span>
+            <button class="chat-consent-close" onclick="document.getElementById('demoConsent').style.display='none'" aria-label="Dismiss">×</button>
+          </div>
+          <div class="chat-input-row" style="border-top:none;">
+            <input type="text" id="chatInput" data-i18n-placeholder="demo.inputPlaceholder" placeholder="Ask it something a real customer would ask…" />
+            <button class="chat-send" id="chatSend" aria-label="Send">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            </button>
+          </div>
         </div>
-        <div class="chat-input-row"> data-i18n-placeholder="demo.inputPlaceholder" placeholder="Ask it something a real customer would ask…" />
-          <button class="chat-send" id="chatSend" aria-label="Send">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-          </button>
-        </div>
-        <div class="try-hint" data-i18n="demo.tryHint">This is the same assistant we'd build into your site. Go ahead, try it.</div>
       </div>
 
     </div>
@@ -710,17 +713,18 @@
           <div class="demo-head-dots" id="contactMenuBtn"><span></span><span></span><span></span><div class="chat-menu" id="contactMenu"><button class="chat-menu-item" id="contactReset"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>Reset conversation</button></div></div>
         </div>
         <div class="chat-body" id="contactChatBody"></div>
-        <div class="chat-consent" id="contactConsent">
-          <span>By chatting, you agree to our <a href="privacy-policy.html" target="_blank">privacy policy</a>.</span>
-          <button class="chat-consent-close" onclick="document.getElementById('contactConsent').style.display='none'" aria-label="Dismiss">×</button>
+        <div style="background:#fff;border-top:1px solid #ECEEF1;">
+          <div class="chat-consent" id="contactConsent">
+            <span>By chatting, you agree to our <a href="privacy-policy.html" target="_blank">privacy policy</a>.</span>
+            <button class="chat-consent-close" onclick="document.getElementById('contactConsent').style.display='none'" aria-label="Dismiss">×</button>
+          </div>
+          <div class="chat-input-row" style="border-top:none;">
+            <input type="text" id="contactChatInput" data-i18n-placeholder="contact.inputPlaceholder" placeholder="What does your business need?" />
+            <button class="chat-send" id="contactChatSend" aria-label="Send">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            </button>
+          </div>
         </div>
-        <div class="chat-input-row">
-          <input type="text" id="contactChatInput" data-i18n-placeholder="contact.inputPlaceholder" placeholder="What does your business need?" />
-          <button class="chat-send" id="contactChatSend" aria-label="Send">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-          </button>
-        </div>
-        <div class="try-hint" data-i18n="contact.tryHint">Leave your name and contact info and we'll follow up, no commitment.</div>
       </div>
     </div>
 </div>
