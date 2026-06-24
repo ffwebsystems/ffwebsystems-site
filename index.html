@@ -352,7 +352,7 @@
   }
 
   /* PRICING SECTION */
-  .pricing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:32px;}
+  .pricing-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:32px;}
   .pricing-card{
     background:#fff;border-radius:14px;
     border:1px solid var(--line-strong);
@@ -398,7 +398,8 @@
   .pricing-notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .pricing-note{font-size:12.5px;color:var(--ink-soft);line-height:1.6;display:flex;gap:8px;}
   .pricing-note-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px;}
-  @media(max-width:860px){.pricing-grid{grid-template-columns:1fr;}}
+  @media(max-width:1060px){.pricing-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+  @media(max-width:600px){.pricing-grid{grid-template-columns:1fr;}}
   @media(max-width:600px){.pricing-notes-grid{grid-template-columns:1fr;}}
 
   /* ABOUT SECTION */
@@ -635,6 +636,23 @@
             <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Priority support</div>
           </div>
           <a href="#contact"><button class="pkg-cta">Get started</button></a>
+        </div>
+
+        <!-- Custom -->
+        <div class="pricing-card" style="border:1px solid var(--night-border-strong);background:var(--night-3);">
+          <span class="pkg-badge" style="background:var(--night-2);color:rgba(255,255,255,0.55);">Custom</span>
+          <div class="pkg-name" style="color:#fff;">Something else in mind?</div>
+          <div class="pkg-desc" style="color:rgba(255,255,255,0.5);">Not every business fits a template. Tell us what you need and we'll put together a quote that makes sense for you.</div>
+          <div style="margin-bottom:20px;"><span class="pkg-price" style="font-size:22px;color:rgba(255,255,255,0.6);">Let's talk</span></div>
+          <hr class="pkg-divider" style="border-color:rgba(255,255,255,0.1);"/>
+          <div class="pkg-features" style="flex:1;">
+            <div class="pkg-feat" style="color:rgba(255,255,255,0.7);"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Any number of pages</div>
+            <div class="pkg-feat" style="color:rgba(255,255,255,0.7);"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Custom AI workflows</div>
+            <div class="pkg-feat" style="color:rgba(255,255,255,0.7);"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Integrations with your tools</div>
+            <div class="pkg-feat" style="color:rgba(255,255,255,0.7);"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Flexible monthly retainer</div>
+            <div class="pkg-feat" style="color:rgba(255,255,255,0.7);"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Quoted per project</div>
+          </div>
+          <a href="#contact"><button class="pkg-cta" style="background:transparent;border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.8);">Get in touch</button></a>
         </div>
 
       </div>
