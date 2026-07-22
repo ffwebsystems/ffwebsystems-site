@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /berenice-manager.html
+
+Sitemap: https://ffwebsystems.com/sitemap.xml
