@@ -342,6 +342,8 @@
   h2{font-size:34px;font-weight:800;letter-spacing:-0.025em;margin-bottom:14px;color:var(--ink);}
   .section-desc{color:var(--ink-soft);font-size:16px;line-height:1.65;}
 
+  #how .section-head{margin-left:auto;margin-right:auto;text-align:center;}
+  #how .moves{max-width:640px;margin:0 auto;}
   .moves{display:flex;flex-direction:column;}
   .move{display:grid;grid-template-columns:56px 1fr;gap:24px;padding:28px 0;border-bottom:1px solid var(--line);align-items:start;}
   .move:first-child{padding-top:0;}
@@ -491,7 +493,7 @@
 <header class="site-nav">
   <div class="wrap">
     <nav class="nav-inner">
-      <div class="brand"><img src="/ff-logo.png" alt="F&amp;F" style="height:42px;width:42px;border-radius:50%;display:block;flex-shrink:0;"> F&amp;F Web Systems</div>
+      <div class="brand"><img src="/ff-logo.png" alt="F&F Web Systems" style="height:38px;width:auto;"></div>
       <div class="navlinks">
         <a href="#how" data-i18n="nav.how">How it works</a>
         <a href="#about" data-i18n="nav.about">About</a>
@@ -526,9 +528,7 @@
       <div class="demo-panel" id="demo">
         <div class="demo-head">
           <div class="demo-title">
-            <div style="width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;">
-              <img src="/arc-mark.png" alt="F&F" style="width:100%;height:100%;object-fit:cover;object-position:center;transform:scale(1.4);">
-            </div>
+            <img src="/arc-mark.png" alt="F&F" style="width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:center;flex-shrink:0;">
             <div class="demo-title-text">
               <div class="demo-title-name" data-i18n="demo.title">Live demo</div>
               <div class="demo-title-status">
@@ -611,7 +611,7 @@
           <div class="pkg-name">Web Presence</div>
           <div class="pkg-desc">A clean, fast site that looks professional and shows up on Google.</div>
           <div><span class="pkg-price">$500</span><span class="pkg-price-label">setup</span></div>
-          <div class="pkg-monthly">then <strong>$35/mo</strong> hosting &amp; maintenance</div>
+          <div class="pkg-monthly">then <strong>$25/mo</strong> hosting &amp; maintenance</div>
           <hr class="pkg-divider"/>
           <div class="pkg-features">
             <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Custom single-page website</div>
@@ -630,7 +630,7 @@
           <div class="pkg-name">Web + AI</div>
           <div class="pkg-desc">Your site plus a trained AI assistant that answers customers 24/7.</div>
           <div><span class="pkg-price">$950</span><span class="pkg-price-label">setup</span></div>
-          <div class="pkg-monthly">then <strong>$65/mo</strong> hosting &amp; maintenance</div>
+          <div class="pkg-monthly">then <strong>$40/mo</strong> hosting &amp; maintenance</div>
           <hr class="pkg-divider"/>
           <div class="pkg-features">
             <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Everything in Starter</div>
@@ -649,7 +649,7 @@
           <div class="pkg-name">Full Stack</div>
           <div class="pkg-desc">Everything plus local SEO and Google setup to drive real traffic.</div>
           <div><span class="pkg-price">$1,400</span><span class="pkg-price-label">setup</span></div>
-          <div class="pkg-monthly">then <strong>$100/mo</strong> hosting &amp; maintenance</div>
+          <div class="pkg-monthly">then <strong>$70/mo</strong> hosting &amp; maintenance</div>
           <hr class="pkg-divider"/>
           <div class="pkg-features">
             <div class="pkg-feat"><div class="feat-icon"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4.5,7.5 8,3"/></svg></div>Everything in Web + AI</div>
@@ -704,9 +704,7 @@
       <div class="contact-panel" id="contact">
         <div class="demo-head">
           <div class="demo-title">
-            <div style="width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;">
-              <img src="/arc-mark.png" alt="F&F" style="width:100%;height:100%;object-fit:cover;object-position:center;transform:scale(1.4);">
-            </div>
+            <img src="/arc-mark.png" alt="F&F" style="width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:center;flex-shrink:0;">
             <div class="demo-title-text">
               <div class="demo-title-name" data-i18n="contact.title">F&amp;F Assistant</div>
               <div class="demo-title-status">
