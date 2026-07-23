@@ -1139,6 +1139,8 @@ async function getContactReply(userText) {
 async function handleDemoSend() {
   const text = chatInputEl.value.trim();
   if (!text) return;
+  const demoConsentEl = document.getElementById("demoConsent");
+  if (demoConsentEl) demoConsentEl.style.display = "none";
   chatInputEl.value = "";
   const chipsRow = chatBodyEl.querySelector(".chat-chips-row");
   if (chipsRow) chipsRow.remove();
@@ -1192,6 +1194,8 @@ function renderConfirmCard(data) {
 async function handleContactSend() {
   const text = contactChatInputEl.value.trim();
   if (!text) return;
+  const contactConsentEl = document.getElementById("contactConsent");
+  if (contactConsentEl) contactConsentEl.style.display = "none";
   contactChatInputEl.value = "";
   const chipsRow = contactChatBodyEl.querySelector(".chat-chips-row");
   if (chipsRow) chipsRow.remove();
