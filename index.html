@@ -104,6 +104,12 @@
     padding:9px 20px;border-radius:7px;transition:opacity .15s;
   }
   .nav-cta:hover{opacity:0.88;}
+  .nav-portal{
+    font-size:13.5px;font-weight:600;color:var(--accent);
+    padding:9px 16px;border-radius:7px;border:1.5px solid var(--accent);
+    transition:background .15s,color .15s;
+  }
+  .nav-portal:hover{background:var(--accent);color:#fff;}
 
   /* HERO */
   .hero{padding:96px 0 100px;background:var(--night);position:relative;overflow:hidden;}
@@ -503,6 +509,7 @@
       </div>
       <div class="nav-right">
         <button class="lang-switch" id="langSwitch" type="button">ES</button>
+        <a href="/portal" class="nav-portal">Client Login</a>
         <a href="#demo" class="nav-cta" data-i18n="nav.cta">Try the demo</a>
       </div>
     </nav>
