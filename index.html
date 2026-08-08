@@ -134,8 +134,17 @@
 
   @media(max-width:760px){
     .navlinks{display:none;}
-    .nav-right .lang-switch,.nav-right .nav-portal,.nav-right .nav-cta{display:none;}
-    .nav-hamburger{display:flex;}
+    .nav-right{gap:6px;}
+    .lang-switch{padding:6px 9px;font-size:10.5px;}
+    .nav-right .nav-portal{
+      display:flex;align-items:center;padding:7px 10px;font-size:12px;
+    }
+    .nav-right .nav-cta{padding:7px 12px;font-size:12px;}
+    .nav-hamburger{display:flex;width:34px;height:34px;}
+  }
+  @media(max-width:400px){
+    .lang-switch{display:none;}
+    .brand img{height:30px !important;}
   }
 
   /* HERO */
@@ -537,7 +546,7 @@
       <div class="nav-right">
         <button class="lang-switch" id="langSwitch" type="button">ES</button>
         <a href="/portal" class="nav-portal">Client Login</a>
-        <a href="#demo" class="nav-cta" data-i18n="nav.cta">Try the demo</a>
+        <a href="#demo" class="nav-cta" data-i18n="nav.cta">Chat with our AI</a>
         <button class="nav-hamburger" id="navHamburger" type="button" aria-label="Open menu">
           <span></span><span></span><span></span>
         </button>
@@ -549,7 +558,7 @@
       <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
       <a href="mailto:ffwebsystems@gmail.com">ffwebsystems@gmail.com</a>
       <a href="/portal" class="mm-portal">Client Login</a>
-      <a href="#demo" class="mm-cta" data-i18n="nav.cta">Try the demo</a>
+      <a href="#demo" class="mm-cta" data-i18n="nav.cta">Chat with our AI</a>
       <button type="button" onclick="document.getElementById('langSwitch').click()">Switch to Spanish / ES</button>
     </div>
   </div>
@@ -959,7 +968,7 @@ const I18N = {
   "nav.how":              { en: "How it works",    es: "Cómo funciona" },
   "nav.about":            { en: "About",            es: "Nosotros" },
   "nav.pricing":          { en: "Pricing",          es: "Precios" },
-  "nav.cta":              { en: "Try the demo",     es: "Probar la demo" },
+  "nav.cta":              { en: "Chat with our AI", es: "Chatea con la IA" },
   "hero.eyebrow":         { en: "Websites for local businesses", es: "Sitios web para negocios locales" },
   "hero.lede":            { en: "We build your site and put a trained AI assistant on it, so visitors get real answers at 11pm on a Sunday instead of a contact form nobody fills out.", es: "Construimos tu sitio web y le ponemos un asistente de IA entrenado, para que los visitantes reciban respuesta a las 11pm un domingo, en lugar de un formulario de contacto que nadie llena." },
   "hero.ctaPrimary":      { en: "Try the AI on this page", es: "Prueba la IA en esta página" },
