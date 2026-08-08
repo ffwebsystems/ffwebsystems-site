@@ -7,6 +7,8 @@ export async function onRequestGet({ request, env }) {
     id: client.id,
     username: client.username,
     business_name: client.business_name,
+    email: client.email,
     progress_stage: client.progress_stage,
+    created_at: client.created_at,
   });
 }
