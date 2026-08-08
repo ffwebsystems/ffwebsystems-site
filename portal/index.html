@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Portal — F&amp;F Web Systems</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:#0A0C10;color:#F7F8FA;min-height:100vh;
+    display:flex;align-items:center;justify-content:center;padding:24px;
+  }
+  .card{
+    background:#12151C;border:1px solid #232733;border-radius:14px;
+    padding:32px;width:100%;max-width:420px;
+  }
+  h1{font-size:20px;font-weight:700;margin-bottom:4px;letter-spacing:-0.02em;}
+  .sub{font-size:13px;color:#9299A6;margin-bottom:24px;}
+  label{display:block;font-size:13px;color:#9299A6;margin-bottom:6px;margin-top:14px;}
+  input[type=text],input[type=password]{
+    width:100%;padding:10px 12px;border-radius:8px;border:1px solid #2A2F3B;
+    background:#0F1117;color:#F7F8FA;font-size:14px;
+  }
+  button{
+    margin-top:20px;width:100%;padding:11px;border-radius:8px;border:none;
+    background:#3548E0;color:#fff;font-weight:600;font-size:14px;cursor:pointer;
+  }
+  button:hover{background:#2b3ac2;}
+  .error{color:#FF6B6B;font-size:13px;margin-top:10px;}
+  .hidden{display:none;}
+  .file-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:10px 0;border-bottom:1px solid #232733;font-size:13px;
+  }
+  .file-row a{color:#7C8AFF;text-decoration:none;}
+  .upload-zone{
+    border:2px dashed #2A2F3B;border-radius:10px;padding:24px;text-align:center;
+    font-size:13px;color:#9299A6;margin-top:18px;cursor:pointer;
+  }
+  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+  .logout{font-size:12px;color:#9299A6;cursor:pointer;}
+  .stepper{display:flex;align-items:center;margin:22px 0 26px;}
+  .step{flex:1;text-align:center;position:relative;}
+  .step .dot{
+    width:22px;height:22px;border-radius:50%;background:#232733;border:2px solid #2A2F3B;
+    margin:0 auto 8px;display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:700;color:#9299A6;
+  }
+  .step.done .dot{background:#3548E0;border-color:#3548E0;color:#fff;}
+  .step .label{font-size:11px;color:#9299A6;}
+  .step.done .label{color:#F7F8FA;}
+  .step .line{
+    position:absolute;top:11px;left:-50%;width:100%;height:2px;background:#2A2F3B;z-index:-1;
+  }
+  .step.done .line{background:#3548E0;}
+  .step:first-child .line{display:none;}
+</style>
+</head>
+<body>
+
+<div class="card" id="loginCard">
+  <h1>Client Portal</h1>
+  <div class="sub">F&amp;F Web Systems</div>
+  <label>Username</label>
+  <input type="text" id="username">
+  <label>Password</label>
+  <input type="password" id="password">
+  <button onclick="login()">Log in</button>
+  <div class="error hidden" id="loginError"></div>
+</div>
+
+<div class="card hidden" id="portalCard" style="max-width:520px;">
+  <div class="top">
+    <h1 id="welcome">Welcome</h1>
+    <span class="logout" onclick="logout()">Log out</span>
+  </div>
+  <div class="stepper" id="stepper"></div>
+  <div class="upload-zone" id="dropZone">
+    Click or drag a file here to upload
+    <input type="file" id="fileInput" class="hidden">
+  </div>
+  <div id="fileList" style="margin-top:20px;"></div>
+</div>
+
+<script>
+const API = ""; // same-origin; set to https://portal.ffwebsystems.com if served separately
+
+async function login() {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  const errEl = document.getElementById('loginError');
+  errEl.classList.add('hidden');
+  const res = await fetch(API + '/api/login', {
+    method: 'POST', credentials: 'include',
+    headers: {'content-type':'application/json'},
+    body: JSON.stringify({username, password})
+  });
+  const data = await res.json();
+  if (!res.ok) { errEl.textContent = data.error || 'Login failed'; errEl.classList.remove('hidden'); return; }
+  document.getElementById('loginCard').classList.add('hidden');
+  document.getElementById('portalCard').classList.remove('hidden');
+  document.getElementById('welcome').textContent = data.business_name;
+  renderStepper(data.progress_stage);
+  loadFiles();
+}
+
+const STAGES = ['Design', 'Development', 'Review', 'Live'];
+function renderStepper(currentStage) {
+  const el = document.getElementById('stepper');
+  el.innerHTML = STAGES.map((label, i) => `
+    <div class="step ${i <= currentStage ? 'done' : ''}">
+      <div class="line"></div>
+      <div class="dot">${i <= currentStage ? '\u2713' : i + 1}</div>
+      <div class="label">${label}</div>
+    </div>
+  `).join('');
+}
+
+async function logout() {
+  await fetch(API + '/api/logout', { method: 'POST', credentials: 'include' });
+  location.reload();
+}
+
+async function loadFiles() {
+  const res = await fetch(API + '/api/files', { credentials: 'include' });
+  const data = await res.json();
+  const listEl = document.getElementById('fileList');
+  listEl.innerHTML = '';
+  (data.files || []).forEach(f => {
+    const row = document.createElement('div');
+    row.className = 'file-row';
+    row.innerHTML = `<span>${f.filename}</span><a href="${API}/api/files/${f.id}" target="_blank">Download</a>`;
+    listEl.appendChild(row);
+  });
+}
+
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+dropZone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', () => uploadFile(fileInput.files[0]));
+dropZone.addEventListener('dragover', e => e.preventDefault());
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  if (e.dataTransfer.files[0]) uploadFile(e.dataTransfer.files[0]);
+});
+
+async function uploadFile(file) {
+  if (!file) return;
+  const form = new FormData();
+  form.append('file', file);
+  dropZone.textContent = 'Uploading...';
+  await fetch(API + '/api/upload', { method: 'POST', credentials: 'include', body: form });
+  dropZone.textContent = 'Click or drag a file here to upload';
+  loadFiles();
+}
+</script>
+
+</body>
+</html>
